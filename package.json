@@ -1,9 +1,9 @@
 {
-  "name": "ProgressBarButton",
+  "name": "TimeSeries",
   "version": "1.0.0",
   "description": "Send progress feedback to user interface when processing takes long.",
-  "author": "Andries Smit <andries.smit@flockofbirds.org",
-  "copyright": "Flock of Birds International BV",
+  "author": "Derrick Kwagala <derrick.kwagala@flockofbirds.org",
+  "copyright": "Flock of Birds",
   "main": "Gruntfile.js",
   "directories": {
     "test": "test"
@@ -13,11 +13,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mendix/Mx-Groupbox-Accordion.git"
+    "url": "https://github.com/djkwagala/TimeSeriesWidgetMx.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mendix/Mx-Groupbox-Accordion/issues"
+    "url": "https://github.com/djkwagala/TimeSeriesWidgetMx/issues"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
@@ -32,6 +32,8 @@
   "dependencies": {
     "react": "^15.3.2",
     "react-addons-pure-render-mixin": "^15.3.2",
-    "react-autobind": "^1.0.6"
+    "react-autobind": "^1.0.6",
+    "react-dom": "^15.3.2",
+    "react-nvd3": "^0.5.7"
   }
 }

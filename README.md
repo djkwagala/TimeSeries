@@ -1,9 +1,9 @@
-# Progress Bar Button
-Author: Andries Smit, Flock of Birds
+# TimeSeries 2.0
+Author: Derrick Kwagala, Flock of Birds
 
 Type: Widget
 Latest Version: 1.0
-Package file name: Progress Bar Button.mpk
+Package file name: TimeSeries.mpk
 
 ## Description
 
@@ -92,4 +92,4 @@ https://github.com/Andries-Smit/Mx-Progress-Bar-Button
 * None so far; please let me know when there are any issues or suggestions.
 
 Please report any issues via the github issue tracker:
-https://github.com/Andries-Smit/Mx-Progress-Bar-Button/issues
+https://github.com/Andries-Smit/Mx-Progress-Bar-Button/issues 
