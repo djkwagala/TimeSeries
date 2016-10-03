@@ -27,19 +27,18 @@ import * as React from "TimeSeriesChart/lib/react";
 import ReactDOM  = require ("TimeSeriesChart/lib/react-dom");
 // import * as d3 from "TimeSeriesChart/lib/d3";
 // import * as NVD3Chart from  "TimeSeriesChart/lib/react-nvd3";
-// import * as nv2 from "TimeSeriesChart/lib/nv.d3";
+// import * as nv from "TimeSeriesChart/lib/nv.d3";
 import Wrapper from "./components/Wrapper";
 
 export class TimeSeriesWrapper extends _WidgetBase {
     // Parameters configured in the Modeler    
     private svgNode: string;
     private graphSourceURL: string ;
-    
-
     // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
     private contextObj: mendix.lib.MxObject;
     private handles: number[];
     private testData: Object[];
+    // mxui.dom.addCss(require.toUrl("./ui/nv.d3.css"));
 
     // The TypeScript Contructor, not the dojo consctuctor, move contructor work into widget prototype at bottom of the page. 
     constructor(args?: Object, elem?: HTMLElement) {
@@ -48,27 +47,28 @@ export class TimeSeriesWrapper extends _WidgetBase {
         return new dojoTimeSeries(args, elem);
     }
     public createProps() {
-        return { 
+        return {
             // svgNode: this.svgNode,
             // graphSourceURL: this.graphSourceURL ,
             datum: this.testData ,
-            widgetId:this.id+"_Wrapper"
+            widgetId: this.id + "_Wrapper",
         };
     }
-    
+
     // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
     public postCreate() {
-        logger.debug(this.id + ".postCreate !");      
-        this.loadData = this.loadData.bind(this); 
+        logger.debug(this.id + ".postCreate !");
+        this.loadData = this.loadData.bind(this);
     }
     public loadData() {
-        logger.debug(this.id + ".loadData");  
-        this.testData = [{
+        logger.debug(this.id + ".loadData");
+        this.testData = [
+        {
             key: "Cumulative Return",
             values: [
                 {
                     "label" : "A" ,
-                    "value" : -29.765957771107
+                    "value" : 29.765957771107
                 } ,
                 {
                     "label" : "B" ,
@@ -88,18 +88,19 @@ export class TimeSeriesWrapper extends _WidgetBase {
                 } ,
                 {
                     "label" : "F" ,
-                    "value" : -98.079782601442
+                    "value" : 98.079782601442
                 } ,
                 {
                     "label" : "G" ,
-                    "value" : -13.925743130903
+                    "value" : 13.925743130903
                 } ,
                 {
                     "label" : "H" ,
-                    "value" : -5.1387322875705
+                    "value" : 5.1387322875705
                 }
             ]
-        }];
+        }
+    ];
     }
     // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
     public update(obj: mendix.lib.MxObject, callback?: Function) {
@@ -137,22 +138,19 @@ export class TimeSeriesWrapper extends _WidgetBase {
     // Set store value, could trigger a rerender the interface.
     private updateRendering (callback?: Function) {
         logger.debug(this.id + ".updateRendering");
-                
-        if (this.contextObj!==null) {
+        if (this.contextObj !== null) {
             this.loadData();
             logger.debug(this.id + ".beforeReactDOM");
-            // logger.debug("nv2 "+nv2);
-            ReactDOM.render(<Wrapper {...this.createProps() } />,this.domNode);
+            ReactDOM.render(<Wrapper {...this.createProps() } />, this.domNode);
         }
 
-       
+
         // The callback, coming from update, needs to be executed, to let the page know it finished rendering
         mxLang.nullExec(callback);
     }
     // update the progress messages and bar. 
     private updateProgress() {
         logger.debug(this.id + ".updateProgress");
-        
     }
     // Remove subscriptions
     private _unsubscribe () {
@@ -189,7 +187,6 @@ export class TimeSeriesWrapper extends _WidgetBase {
         }
     }
 }
-export 
 // Declare widget's prototype the Dojo way
 // Thanks to https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/dojo/README.md
 let dojoTimeSeries = dojoDeclare("TimeSeriesChart.widget.TimeSeriesChart", [_WidgetBase], (function(Source: any) {

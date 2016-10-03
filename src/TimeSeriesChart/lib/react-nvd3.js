@@ -96,8 +96,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _d2 = _interopRequireDefault(_d);
 
-	var _nvd = __webpack_require__(57);
-
+	// var _nvd = __webpack_require__(57);
+	var _nvd = nv;
 	var _nvd2 = _interopRequireDefault(_nvd);
 
 	var _utils = __webpack_require__(58);

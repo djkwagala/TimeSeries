@@ -17,12 +17,12 @@ define(["require", "exports", "dojo/_base/declare", "mxui/widget/_WidgetBase", "
         __extends(TimeSeriesWrapper, _super);
         function TimeSeriesWrapper(args, elem) {
             _super.call(this);
-            return new exports.dojoTimeSeries(args, elem);
+            return new dojoTimeSeries(args, elem);
         }
         TimeSeriesWrapper.prototype.createProps = function () {
             return {
                 datum: this.testData,
-                widgetId: this.id + "_Wrapper"
+                widgetId: this.id + "_Wrapper",
             };
         };
         TimeSeriesWrapper.prototype.postCreate = function () {
@@ -31,12 +31,13 @@ define(["require", "exports", "dojo/_base/declare", "mxui/widget/_WidgetBase", "
         };
         TimeSeriesWrapper.prototype.loadData = function () {
             logger.debug(this.id + ".loadData");
-            this.testData = [{
+            this.testData = [
+                {
                     key: "Cumulative Return",
                     values: [
                         {
                             "label": "A",
-                            "value": -29.765957771107
+                            "value": 29.765957771107
                         },
                         {
                             "label": "B",
@@ -56,18 +57,19 @@ define(["require", "exports", "dojo/_base/declare", "mxui/widget/_WidgetBase", "
                         },
                         {
                             "label": "F",
-                            "value": -98.079782601442
+                            "value": 98.079782601442
                         },
                         {
                             "label": "G",
-                            "value": -13.925743130903
+                            "value": 13.925743130903
                         },
                         {
                             "label": "H",
-                            "value": -5.1387322875705
+                            "value": 5.1387322875705
                         }
                     ]
-                }];
+                }
+            ];
         };
         TimeSeriesWrapper.prototype.update = function (obj, callback) {
             logger.debug(this.id + ".update");
@@ -143,7 +145,7 @@ define(["require", "exports", "dojo/_base/declare", "mxui/widget/_WidgetBase", "
         return TimeSeriesWrapper;
     }(_WidgetBase));
     exports.TimeSeriesWrapper = TimeSeriesWrapper;
-    exports.dojoTimeSeries = dojoDeclare("TimeSeriesChart.widget.TimeSeriesChart", [_WidgetBase], (function (Source) {
+    var dojoTimeSeries = dojoDeclare("TimeSeriesChart.widget.TimeSeriesChart", [_WidgetBase], (function (Source) {
         var result = {};
         result.constructor = function () {
             logger.debug(this.id + ".constructor dojo");

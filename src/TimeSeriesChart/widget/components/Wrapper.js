@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "TimeSeriesChart/lib/react", "TimeSeriesChart/lib/d3", "TimeSeriesChart/lib/react-nvd3", "TimeSeriesChart/lib/nv.d3"], function (require, exports, React, d3, NVD3Chart) {
+define(["require", "exports", "TimeSeriesChart/lib/react", "TimeSeriesChart/lib/d3", "TimeSeriesChart/lib/react-nvd3"], function (require, exports, React, d3, NVD3Chart) {
     "use strict";
     var Wrapper = (function (_super) {
         __extends(Wrapper, _super);
@@ -21,7 +21,7 @@ define(["require", "exports", "TimeSeriesChart/lib/react", "TimeSeriesChart/lib/
         };
         Wrapper.prototype.render = function () {
             logger.debug(this.props.widgetId + ".render");
-            var chart;
+            var chart = React.createElement("div", null, "Loading ...");
             var context = {
                 getColor: function (iparam) {
                     var colors = d3.scale.category20().range().slice(10);
@@ -30,14 +30,11 @@ define(["require", "exports", "TimeSeriesChart/lib/react", "TimeSeriesChart/lib/
             };
             if (this.state.visible) {
                 logger.debug(this.props.widgetId + ".render.visibleTrue");
-                logger.debug(nv);
-                return (React.createElement("div", null, 
-                    React.createElement("button", {onClick: this.changeVisibility}, " Click me"), 
-                    React.createElement(NVD3Chart, {context: context, color: { name: 'getColor', type: 'function' }, tooltip: { enabled: true }, type: "discreteBarChart", datum: this.props.datum, x: "label", y: "value"})));
+                chart = React.createElement(NVD3Chart, {context: context, color: { name: "getColor", type: "function" }, tooltip: { enabled: true }, type: "discreteBarChart", datum: this.props.datum, x: "label", y: "value"});
             }
             return (React.createElement("div", null, 
-                React.createElement("button", {onClick: this.changeVisibility}, " Click me")
-            ));
+                React.createElement("button", {onClick: this.changeVisibility}, "Click me "), 
+                chart));
         };
         Wrapper.defaultProps = {
             widgetId: "",

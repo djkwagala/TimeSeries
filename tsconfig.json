@@ -17,6 +17,6 @@
 		"out",
 		"nbproject",
 		"typings/redux",
-		"src/TimeSeries/lib"
+		"src/TimeSeriesChart/lib"
   ]
 }
