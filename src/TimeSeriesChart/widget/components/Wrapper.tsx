@@ -5,7 +5,7 @@ import * as React from "TimeSeriesChart/lib/react";
 import ReactDOM  = require ("TimeSeriesChart/lib/react-dom");
 import * as d3 from "TimeSeriesChart/lib/d3";
 import * as NVD3Chart from "TimeSeriesChart/lib/react-nvd3";
-import * as nv2 from "TimeSeriesChart/lib/nv.d3";
+// import * as nv2 from "TimeSeriesChart/lib/nv.d3";
 // import nv2 = require("TimeSeriesChart/lib/nv.d3");
 
 

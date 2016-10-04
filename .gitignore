@@ -12,6 +12,7 @@ test/javasource/*
 test/javasource/myfirstmodule/*
 !test/javasource/myfirstmodule/actions
 
+.vscode/
 
 out/
 nbproject/
