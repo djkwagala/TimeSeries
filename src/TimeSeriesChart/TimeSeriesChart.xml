@@ -5,14 +5,106 @@
 
     <icon />
 
-    <properties>        
-        <property key="graphSourceURL" type="attribute" >
-            <caption>URL</caption>
-            <category>Graph source</category>
-            <description>URL that replies with a JSON</description>
-            <attributeTypes>
-                <attributeType name="String" />
-            </attributeTypes>
+    <properties>
+        <property key="showXAxis" type="boolean" defaultValue="true">
+            <caption>Display x-axis</caption>
+            <category>Chart Config</category>
+            <description>To enable display of x-axis</description>
+        </property>
+        <property key="showYAxis" type="boolean" defaultValue="true">
+            <caption>Display y-axis</caption>
+            <category>Chart Config</category>
+            <description>Enable display of the y-axis</description>
+        </property>
+
+        <property key="useInteractiveGuidelines" type="boolean" defaultValue="true">
+            <caption>Use interactive guidelines</caption>
+            <category>Chart Config</category>
+            <description>For showing nice  looking tooltips and a guideline</description>
+        </property>
+
+        <property key="showLegend" type="boolean" defaultValue="true">
+            <caption>Display legend</caption>
+            <category>Chart Config</category>
+            <description>Enable display of the legend</description>
+        </property>
+
+        <property key="xAxisLabel" type="string">
+            <caption>X-axis label</caption>
+            <category>X-axis Config</category>
+            <description>Label for the x-axis</description>   
+        </property>        
+        <property key="xAxisFormat" type="string" required="false">
+            <caption>X-axis data format</caption>
+            <category>X-axis Config</category>
+            <description>Format of data on x-axis</description>
+        </property>
+        <property key="staggerLabels" type="boolean" defaultValue="true">
+            <caption>Enable Stagger-labels</caption>
+            <category>X-axis Config</category>
+            <description>Display values on x-axis so they all fit</description>
+        </property>
+
+
+        <property key="yAxisLabel" type="string">
+            <caption>Y-axis label</caption>
+            <category>Y-axis Config</category>
+            <description>Label for the y-axis</description>          
+        </property>
+        <property key="yAxisFormat" type="string" required="false">
+            <caption>Y-axis data format</caption>
+            <category>Y-axis Config</category>
+            <description>Format of data on y-axis</description>
+        </property>
+        
+        <property key="seriesConfig" type="object" isList="true">
+            <caption>Series</caption>
+            <category>Series Config</category>
+            <description>Add a series and configure its properties</description> 
+            <properties>
+                <property key="imageEntity" type="entity">
+                    <caption>Data Entity</caption>
+                    <category>Data source</category>
+                    <description>The entity which should be displayed in the carousel</description>
+                </property>
+                <property key="imageSource" type="enumeration" defaultValue="microflow">
+                    <caption>Source</caption>
+                    <category>Data source</category>
+                    <description>Type of source</description>                
+                    <enumerationValues>
+                        <enumerationValue key="xpath">XPath</enumerationValue>
+                        <enumerationValue key="microflow">Microflow</enumerationValue>
+                    </enumerationValues> 
+                </property>
+                <property key="entityConstraint" type="entityConstraint" entityProperty="imageEntity" required="false">
+                    <caption>Constraint</caption>
+                    <category>Source - XPath</category>
+                    <description>Constraint on the carousel entity.</description>
+                </property>
+                <property key="dataSourceMicroflow" type="microflow" required="false">
+                    <caption>Data source microflow </caption>
+                    <category>Source - microflow</category>
+                    <description>Returns images to display on Carousel.</description>
+                    <returnType type="Object" entityProperty="imageEntity" isList="true"/>
+                </property>
+                <!-- Drop after -->
+                <property key="serieXAttr" type="attribute" entityProperty="imageEntity">
+                    <caption>X-Axis data</caption>
+                    <category>Data source</category>
+                    <description>Attribute containing data for x-axis</description>
+                    <attributeTypes>
+                        <attributeType name="DateTime"/>
+                    </attributeTypes>
+                </property>
+               <property key="serieYAttr" type="attribute" entityProperty="imageEntity">
+                    <caption>Y-Axis data</caption>
+                    <category>Data source</category>
+                    <description>Attribute containing data for y-axis</description>
+                    <attributeTypes>
+                        <attributeType name="Decimal"/>
+                    </attributeTypes>
+                </property>
+            </properties>
         </property>
     </properties>
 </widget>

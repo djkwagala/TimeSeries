@@ -72,6 +72,10 @@
       "check-module",
       "check-separator",
       "check-type"
+    ],
+    "interface-name": [
+      false,
+      "always-prefix"
     ]
   }
 }

@@ -46,7 +46,7 @@ export default class Wrapper extends React.Component<IWrapperProps, IWrapperStat
         logger.debug(this.props.widgetId + ".render");
         let chart = <div>Loading ...</div>;
         const context = {
-            getColor: function (iparam) {
+            getColor: function (parameter: any) {
                 let colors = d3.scale.category20().range().slice(10);
                 return colors[ Math.floor(Math.random() * colors.length) ];
             },
