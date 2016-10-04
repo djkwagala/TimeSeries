@@ -49,3 +49,4 @@ define(["require", "exports", "TimeSeriesChart/lib/react", "TimeSeriesChart/lib/
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Wrapper;
 });
+//# sourceMappingURL=Wrapper.js.map

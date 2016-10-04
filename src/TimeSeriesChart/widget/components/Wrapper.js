@@ -23,7 +23,7 @@ define(["require", "exports", "TimeSeriesChart/lib/react", "TimeSeriesChart/lib/
             logger.debug(this.props.widgetId + ".render");
             var chart = React.createElement("div", null, "Loading ...");
             var context = {
-                getColor: function (iparam) {
+                getColor: function (parameter) {
                     var colors = d3.scale.category20().range().slice(10);
                     return colors[Math.floor(Math.random() * colors.length)];
                 },
@@ -46,3 +46,4 @@ define(["require", "exports", "TimeSeriesChart/lib/react", "TimeSeriesChart/lib/
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Wrapper;
 });
+//# sourceMappingURL=Wrapper.js.map

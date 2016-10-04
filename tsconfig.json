@@ -17,7 +17,7 @@
     "test",
 		"out",
 		"nbproject",
-		"typings/redux",
-		"src/TimeSeriesChart/lib"
+		"typings/redux"
+		// "src/TimeSeriesChart/lib"
   ]
 }

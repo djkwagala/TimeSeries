@@ -158,3 +158,4 @@ define(["require", "exports", "dojo/_base/declare", "mxui/widget/_WidgetBase", "
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = TimeSeriesWrapper;
 });
+//# sourceMappingURL=TimeSeriesChart.js.map

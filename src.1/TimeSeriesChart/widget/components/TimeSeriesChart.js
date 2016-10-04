@@ -48,3 +48,4 @@ define(["require", "exports", "TimeSeries/lib/react", "TimeSeries/lib/d3", "Time
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = TimeSeriesChart;
 });
+//# sourceMappingURL=TimeSeriesChart.js.map

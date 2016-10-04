@@ -27,13 +27,14 @@
     "grunt-contrib-copy": "~0.8.0",
     "grunt-contrib-watch": "~0.6.1",
     "load-grunt-tasks": "^3.1.0",
-    "typescript": "^2.0.2"
+    "typescript": "^2.0.3"
   },
   "dependencies": {
-    "react": "^15.3.2",
-    "react-addons-pure-render-mixin": "^15.3.2",
-    "react-autobind": "^1.0.6",
-    "react-dom": "^15.3.2",
-    "react-nvd3": "^0.5.7"
+    "@types/big.js": "0.0.31",
+    "@types/d3": "^3.5.36",
+    "@types/dojo": "^1.9.34",
+    "@types/react": "^0.14.37",
+    "@types/react-dom": "^0.14.17",
+    "grunt-xsltproc": "^0.6.1"
   }
 }
