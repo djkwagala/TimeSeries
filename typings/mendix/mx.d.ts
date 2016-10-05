@@ -1,3 +1,4 @@
+declare var mx: mx.mx;
 
 declare module mx {
 	

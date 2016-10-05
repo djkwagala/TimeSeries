@@ -12,6 +12,13 @@ module.exports = function (grunt) {
                     debounceDelay: 250,
                     livereload: true
                 }
+            },
+            xmlToTypedefinition: {
+                "files": ["./src/" + pkg.name + "/" + pkg.name + ".xml", "widget.xsl"],
+                "tasks": ["xsltproc"],
+                options: {
+                    debounceDelay: 250
+                }
             }
         },
         

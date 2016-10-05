@@ -1,5 +1,5 @@
 {
-  "name": "TimeSeries",
+  "name": "TimeSeriesChart",
   "version": "1.0.0",
   "description": "Send progress feedback to user interface when processing takes long.",
   "author": "Derrick Kwagala <derrick.kwagala@flockofbirds.org",

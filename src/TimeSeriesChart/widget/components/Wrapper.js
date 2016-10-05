@@ -30,7 +30,12 @@ define(["require", "exports", "TimeSeriesChart/lib/react", "TimeSeriesChart/lib/
             };
             if (this.state.visible) {
                 logger.debug(this.props.widgetId + ".render.visibleTrue");
-                chart = React.createElement(NVD3Chart, {context: context, color: { name: "getColor", type: "function" }, tooltip: { enabled: true }, type: "discreteBarChart", datum: this.props.datum, x: "label", y: "value"});
+                chart = React.createElement(NVD3Chart, {
+                    type: "linePlusBarChart",
+                    datum: this.props.datum,
+                    x: function (data_, iterator) { return iterator; },
+                    y: function (data_, iterator) { return data_[1]; }
+                });
             }
             return (React.createElement("div", null, 
                 React.createElement("button", {onClick: this.changeVisibility}, "Click me "), 

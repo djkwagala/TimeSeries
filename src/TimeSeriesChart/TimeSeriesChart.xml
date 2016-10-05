@@ -60,14 +60,14 @@
         <property key="seriesConfig" type="object" isList="true">
             <caption>Series</caption>
             <category>Series Config</category>
-            <description>Add a series and configure its properties</description> 
+            <description>Add a series and configure its properties</description>  -->
             <properties>
-                <property key="imageEntity" type="entity">
+                <property key="serieEntity" type="entity">
                     <caption>Data Entity</caption>
                     <category>Data source</category>
                     <description>The entity which should be displayed in the carousel</description>
                 </property>
-                <property key="imageSource" type="enumeration" defaultValue="microflow">
+                <property key="serieSource" type="enumeration" defaultValue="microflow">
                     <caption>Source</caption>
                     <category>Data source</category>
                     <description>Type of source</description>                
@@ -76,7 +76,7 @@
                         <enumerationValue key="microflow">Microflow</enumerationValue>
                     </enumerationValues> 
                 </property>
-                <property key="entityConstraint" type="entityConstraint" entityProperty="imageEntity" required="false">
+                <property key="entityConstraint" type="entityConstraint" entityProperty="serieEntity" required="false">
                     <caption>Constraint</caption>
                     <category>Source - XPath</category>
                     <description>Constraint on the carousel entity.</description>
@@ -85,10 +85,10 @@
                     <caption>Data source microflow </caption>
                     <category>Source - microflow</category>
                     <description>Returns images to display on Carousel.</description>
-                    <returnType type="Object" entityProperty="imageEntity" isList="true"/>
+                    <returnType type="Object" entityProperty="serieEntity" isList="true"/>
                 </property>
-                <!-- Drop after -->
-                <property key="serieXAttr" type="attribute" entityProperty="imageEntity">
+
+                <property key="serieXAttribute" type="attribute" entityProperty="serieEntity">
                     <caption>X-Axis data</caption>
                     <category>Data source</category>
                     <description>Attribute containing data for x-axis</description>
@@ -96,7 +96,7 @@
                         <attributeType name="DateTime"/>
                     </attributeTypes>
                 </property>
-               <property key="serieYAttr" type="attribute" entityProperty="imageEntity">
+               <property key="serieYAttribute" type="attribute" entityProperty="serieEntity">
                     <caption>Y-Axis data</caption>
                     <category>Data source</category>
                     <description>Attribute containing data for y-axis</description>

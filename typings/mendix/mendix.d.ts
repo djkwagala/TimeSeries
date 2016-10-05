@@ -1,3 +1,4 @@
+declare var logger: mendix.logger;
 
 declare module mendix {
 	module lib {
