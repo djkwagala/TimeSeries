@@ -94,7 +94,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-xsltproc");
-    grunt.registerTask("default", ["watch"]);
+    grunt.registerTask("default", ["clean build", "watch:autoDeployUpdate"]);
     grunt.registerTask("distribute", ["clean:out", "copy:out", "compress:out", "copy:mpks" ]);
     grunt.registerTask(
             "clean build",

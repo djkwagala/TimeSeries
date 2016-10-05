@@ -20,9 +20,7 @@ node_modules/
 *.bak
 *.map
 *.tmp
-*.jshintrc
-src/ProgressBarButton/widget/ProgressBarButton.js
-src/ProgressBarButton/widget/components/ProgressBarButton.js
-src/ProgressBarButton/widget/components/Button.js
-src/ProgressBarButton/widget/components/Button.js
+
+src/TimeSeriesChart/widget/TimeSeriesChart.js
+src/TimeSeriesChart/widget/components/Wrapper.js
 

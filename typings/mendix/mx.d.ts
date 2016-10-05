@@ -1,4 +1,3 @@
-declare var mx: mx.mx;
 
 declare module mx {
 	
@@ -134,3 +133,5 @@ declare module mx {
 		isRtl():string;
 	}
 }
+
+declare var mx: mx.mx;

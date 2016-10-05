@@ -3,7 +3,16 @@
 // widget.d.ts files is auto generated from the params in the widget.xml
 // use > 'grunt xsltproc' or > 'grunt watch' to generate a new file
 
-interface ModelProps {
+export interface SerieConfig {    
+    serieEntity?: string;
+    serieSource?: "xpath" | "microflow";
+    entityConstraint?: string;
+    dataSourceMicroflow?: string;
+    serieXAttribute?: string;
+    serieYAttribute?: string;
+}
+
+export interface ModelProps {
     showXAxis?: boolean;
     showYAxis?: boolean;
     useInteractiveGuidelines?: boolean;
@@ -13,15 +22,7 @@ interface ModelProps {
     staggerLabels?: boolean;
     yAxisLabel?: string;
     yAxisFormat?: string;
-    seriesConfig?: Array<{
-    serieEntity?: string;
-    serieSource?: "xpath" | "microflow";
-    entityConstraint?: string;
-    dataSourceMicroflow?: string;
-    serieXAttribute?: string;
-    serieYAttribute?: string;
-    }>;
-    
+    seriesConfig?: SerieConfig[];
 } 
 
 export default ModelProps;
