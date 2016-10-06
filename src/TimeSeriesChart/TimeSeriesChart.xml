@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <widget id="TimeSeriesChart.widget.TimeSeriesChart" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/">
-    <name>TimeSeries</name>
+    <name>TimeSeriesChart</name>
     <description>Renders a graph</description>
 
     <icon />
@@ -33,24 +33,26 @@
             <caption>X-axis label</caption>
             <category>X-axis Config</category>
             <description>Label for the x-axis</description>   
-        </property>        
+        </property>    
+
         <property key="xAxisFormat" type="string" required="false">
             <caption>X-axis data format</caption>
             <category>X-axis Config</category>
             <description>Format of data on x-axis</description>
         </property>
+
         <property key="staggerLabels" type="boolean" defaultValue="true">
             <caption>Enable Stagger-labels</caption>
             <category>X-axis Config</category>
             <description>Display values on x-axis so they all fit</description>
         </property>
 
-
         <property key="yAxisLabel" type="string">
             <caption>Y-axis label</caption>
             <category>Y-axis Config</category>
             <description>Label for the y-axis</description>          
         </property>
+
         <property key="yAxisFormat" type="string" required="false">
             <caption>Y-axis data format</caption>
             <category>Y-axis Config</category>
@@ -60,14 +62,14 @@
         <property key="seriesConfig" type="object" isList="true">
             <caption>Series</caption>
             <category>Series Config</category>
-            <description>Add a series and configure its properties</description>  -->
+            <description>Add a series and configure its properties</description>
             <properties>
                 <property key="serieEntity" type="entity">
                     <caption>Data Entity</caption>
                     <category>Data source</category>
                     <description>The entity which should be displayed in the carousel</description>
                 </property>
-                <property key="serieSource" type="enumeration" defaultValue="microflow">
+                <property key="serieSource" type="enumeration" defaultValue="xpath">
                     <caption>Source</caption>
                     <category>Data source</category>
                     <description>Type of source</description>                
@@ -103,6 +105,11 @@
                     <attributeTypes>
                         <attributeType name="Decimal"/>
                     </attributeTypes>
+                </property>
+                <property key="serieKey" type="string">
+                    <caption>Serie Key</caption>
+                    <category>Data source</category>
+                    <description>Used in the Legend to interact with the chart</description>                
                 </property>
             </properties>
         </property>

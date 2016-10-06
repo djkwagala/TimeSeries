@@ -66,6 +66,7 @@ export class TimeSeriesWrapper extends _WidgetBase {
     // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
     public postCreate() {
         logger.debug(this.id + ".postCreate");
+        this.data = []; // initialize
         this.updateRendering();
     }
     /*
@@ -120,10 +121,10 @@ export class TimeSeriesWrapper extends _WidgetBase {
                 callback();
             });
         } else if (serie.serieSource === "microflow" && serie.dataSourceMicroflow) {
-            // this.fetchDataFromMicroflow(callback);
+            // this.fetchDataFromMicroflow(callback); 
         } else {
             // TODO improve error message, add config check in widget component.
-            logger.error(this.id + ".updateData unknown source or error in widget configuration"); 
+            logger.error(this.id + ".updateData unknown source or error in widget configuration");
             callback();
         }
     }
@@ -188,14 +189,18 @@ export class TimeSeriesWrapper extends _WidgetBase {
      */
     private setDataFromObjects(objects: mendix.lib.MxObject[], serieConfig: SerieConfig): void {
         logger.debug(this.id + ".getCarouselItemsFromObject");
-        let serie: Serie;
+        logger.debug(objects);
+        let serie: Serie = {} ;
         serie.data = objects.map((itemObject): Data => {
+            logger.debug(itemObject);
             return {
                 xPoint: itemObject.get(serieConfig.serieXAttribute) as number,
-                yPoint: itemObject.get(serieConfig.serieYAttribute) as number,
+                yPoint: parseFloat( itemObject.get(serieConfig.serieYAttribute) ), //convert Big to float or number
             };
         });
+        serie.key = serieConfig.serieKey;
         this.data.push(serie);
+
     }
 
 
@@ -207,7 +212,7 @@ let dojoTimeSeries = dojoDeclare("TimeSeriesChart.widget.TimeSeriesChart", [_Wid
     // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
     result.constructor = function() {
         logger.debug( this.id + ".constructor dojo");
-        this.dataLoaded = false;
+        this.dataLoaded = true;
     };
     for (let i in Source.prototype) {
         if (i !== "constructor" && Source.prototype.hasOwnProperty(i)) {

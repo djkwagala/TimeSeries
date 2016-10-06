@@ -28,6 +28,7 @@ define(["require", "exports", "dojo/_base/declare", "mxui/widget/_WidgetBase", "
         };
         TimeSeriesWrapper.prototype.postCreate = function () {
             logger.debug(this.id + ".postCreate");
+            this.data = [];
             this.updateRendering();
         };
         TimeSeriesWrapper.prototype.update = function (object, callback) {
@@ -117,13 +118,16 @@ define(["require", "exports", "dojo/_base/declare", "mxui/widget/_WidgetBase", "
         };
         TimeSeriesWrapper.prototype.setDataFromObjects = function (objects, serieConfig) {
             logger.debug(this.id + ".getCarouselItemsFromObject");
-            var serie;
+            logger.debug(objects);
+            var serie = {};
             serie.data = objects.map(function (itemObject) {
+                logger.debug(itemObject);
                 return {
                     xPoint: itemObject.get(serieConfig.serieXAttribute),
-                    yPoint: itemObject.get(serieConfig.serieYAttribute),
+                    yPoint: parseFloat(itemObject.get(serieConfig.serieYAttribute)),
                 };
             });
+            serie.key = serieConfig.serieKey;
             this.data.push(serie);
         };
         return TimeSeriesWrapper;
@@ -133,7 +137,7 @@ define(["require", "exports", "dojo/_base/declare", "mxui/widget/_WidgetBase", "
         var result = {};
         result.constructor = function () {
             logger.debug(this.id + ".constructor dojo");
-            this.dataLoaded = false;
+            this.dataLoaded = true;
         };
         for (var i in Source.prototype) {
             if (i !== "constructor" && Source.prototype.hasOwnProperty(i)) {

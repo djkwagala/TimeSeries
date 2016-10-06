@@ -10,6 +10,7 @@ export interface SerieConfig {
     dataSourceMicroflow?: string;
     serieXAttribute?: string;
     serieYAttribute?: string;
+    serieKey?: string;
 }
 
 export interface ModelProps {

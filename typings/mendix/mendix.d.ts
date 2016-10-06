@@ -10,7 +10,7 @@ declare module mendix {
 			addReferences(attr: string, guids: string[] | number[]): boolean;
 			compare(mxobj: mendix.lib.MxObject): boolean;
 			fetch(path: string, callback: Function): void;
-			get(attr: string): string | number | boolean; //add external big	
+			get(attr: string): string | number | boolean | Big ; //add external big	
 			removeReferences(attr:string, guids: string[]): boolean;
 			set(attr: string, val: any): boolean;
 			FetchCallback(requested: any): void;
