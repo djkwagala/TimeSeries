@@ -22,7 +22,7 @@ define(["require", "exports", "TimeSeriesChart/lib/react", "TimeSeriesChart/lib/
             logger.debug(this.props.widgetId + ".render");
             var chart = React.createElement("div", null, "Loading ...");
             var datum = this.getDatum();
-            if (!this.props.dataLoaded) {
+            if (this.props.dataLoaded) {
                 logger.debug(this.props.widgetId + ".render dataLoaded");
                 chart = React.createElement(NVD3Chart, {
                     type: "lineChart",

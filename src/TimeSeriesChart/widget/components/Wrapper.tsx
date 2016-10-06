@@ -45,7 +45,7 @@ export class Wrapper extends React.Component<WidgetProps, {}> {
         logger.debug(this.props.widgetId + ".render");
         let chart = <div>Loading ...</div>;
         const datum = this.getDatum();
-        if (!this.props.dataLoaded) {
+        if (this.props.dataLoaded) {
             logger.debug(this.props.widgetId + ".render dataLoaded");
             chart = React.createElement(NVD3Chart, {
                 type: "lineChart",
@@ -55,7 +55,6 @@ export class Wrapper extends React.Component<WidgetProps, {}> {
                 y: function (data_: any, iterator: any) { return data_[1]; }
             });
         }
-
         return (
             <div>
                 {chart}
