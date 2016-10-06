@@ -16,13 +16,12 @@ export interface Serie {
 export interface WidgetProps extends ModelProps {
     widgetId: string;
     seriesData?: Serie[];
-    dataLoaded: boolean;
+    dataLoaded?: boolean;
 }
 export class Wrapper extends React.Component<WidgetProps, {}> {
     private logMsg: string;
     public static defaultProps: WidgetProps = {
         widgetId: "",
-        dataLoaded: false
     };
 
     public constructor(props: WidgetProps) {
@@ -52,8 +51,8 @@ export class Wrapper extends React.Component<WidgetProps, {}> {
                 type: "lineChart",
                 datum: datum,
                 // TODO check what it is doing!
-               // x: function (data_: any, iterator: any) { return iterator; },
-               // y: function (data_: any, iterator: any) { return data_[1]; }
+                x: function (data_: any, iterator: any) { return iterator; },
+                y: function (data_: any, iterator: any) { return data_[1]; }
             });
         }
 

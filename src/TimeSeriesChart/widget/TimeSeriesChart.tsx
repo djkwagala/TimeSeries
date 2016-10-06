@@ -59,7 +59,7 @@ export class TimeSeriesWrapper extends _WidgetBase {
         return {
             widgetId: this.id + "_Wrapper",
             seriesData: this.data,
-            dataLoaded: !this.dataLoaded
+            dataLoaded: this.dataLoaded
         };
     }
 
@@ -116,18 +116,22 @@ export class TimeSeriesWrapper extends _WidgetBase {
         const serie = this.seriesConfig[0];
         // TODO do this in a async parallel way for all series, in the future.
         if (serie.serieSource === "xpath" && serie.serieEntity) {
-            this.fetchDataFromXpath(serie.serieEntity, serie.entityConstraint, (data: mendix.lib.MxObject[]) => {
+            this.fetchDataFromXpath(serie, (data: mendix.lib.MxObject[]) => {
                 this.setDataFromObjects(data, serie);
                 callback();
             });
         } else if (serie.serieSource === "microflow" && serie.dataSourceMicroflow) {
-            // this.fetchDataFromMicroflow(callback); 
+             this.fetchDataFromMicroflow(serie, (data: mendix.lib.MxObject[]) => {
+                 this.setDataFromObjects(data, serie);
+                 callback();
+             });
         } else {
             // TODO improve error message, add config check in widget component.
             logger.error(this.id + ".updateData unknown source or error in widget configuration");
             callback();
         }
     }
+
 
     // Set store value, could trigger a re-render the interface.
     private updateRendering (callback?: Function) {
@@ -165,12 +169,12 @@ export class TimeSeriesWrapper extends _WidgetBase {
     }
 
     // Fetch data
-    private fetchDataFromXpath(serieEntity: string, entityConstraint: string, callback: Function) {
+    private fetchDataFromXpath(serieConfig: SerieConfig, callback: Function) {
         logger.debug(this.id  + ".fetchDataFromXpath");
         if (this.contextObject)  {
             const guid = this.contextObject ? this.contextObject.getGuid() : "";
-            const constraint = entityConstraint.replace("[%CurrentObject%]", guid);
-            const xpathString = "//" + serieEntity + constraint;
+            const constraint = serieConfig.entityConstraint.replace("[%CurrentObject%]", guid);
+            const xpathString = "//" + serieConfig.serieEntity + constraint;
             mx.data.get({
                 callback: callback.bind(this),
                 error: (error) => {
@@ -203,6 +207,33 @@ export class TimeSeriesWrapper extends _WidgetBase {
 
     }
 
+    private fetchDataFromMicroflow(serieConfig: SerieConfig, callback: Function) {
+        logger.debug(this.id  + ".fetchDataFromMicroflow");
+        if (serieConfig.dataSourceMicroflow) {
+            const params: {
+                    actionname: string,
+                    applyto?: string,
+                    guids?: string[],
+                } = {
+                    actionname: serieConfig.dataSourceMicroflow,
+                    applyto: "selection",
+                    guids: [this.contextObject.getGuid()],
+                };
+
+            mx.data.action({
+                params,
+                callback: callback.bind(this),
+                error: (error) => {
+                    logger.error(this.id  + ": An error occurred while executing microflow: " + error);
+                },
+            });
+        } else {
+            // case there is not context ID the xpath will fail, so it should always show no images.
+            logger.debug(this.id  + ".getDataFromMicroflow, empty context");
+            callback([]);
+        }
+    }
+
 
 }
 // Declare widget's prototype the Dojo way
@@ -212,7 +243,7 @@ let dojoTimeSeries = dojoDeclare("TimeSeriesChart.widget.TimeSeriesChart", [_Wid
     // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
     result.constructor = function() {
         logger.debug( this.id + ".constructor dojo");
-        this.dataLoaded = true;
+        this.dataLoaded = false;
     };
     for (let i in Source.prototype) {
         if (i !== "constructor" && Source.prototype.hasOwnProperty(i)) {

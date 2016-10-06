@@ -23,7 +23,7 @@ define(["require", "exports", "dojo/_base/declare", "mxui/widget/_WidgetBase", "
             return {
                 widgetId: this.id + "_Wrapper",
                 seriesData: this.data,
-                dataLoaded: !this.dataLoaded
+                dataLoaded: this.dataLoaded
             };
         };
         TimeSeriesWrapper.prototype.postCreate = function () {
@@ -54,12 +54,16 @@ define(["require", "exports", "dojo/_base/declare", "mxui/widget/_WidgetBase", "
             logger.debug(this.id + ".getCarouselData");
             var serie = this.seriesConfig[0];
             if (serie.serieSource === "xpath" && serie.serieEntity) {
-                this.fetchDataFromXpath(serie.serieEntity, serie.entityConstraint, function (data) {
+                this.fetchDataFromXpath(serie, function (data) {
                     _this.setDataFromObjects(data, serie);
                     callback();
                 });
             }
             else if (serie.serieSource === "microflow" && serie.dataSourceMicroflow) {
+                this.fetchDataFromMicroflow(serie, function (data) {
+                    _this.setDataFromObjects(data, serie);
+                    callback();
+                });
             }
             else {
                 logger.error(this.id + ".updateData unknown source or error in widget configuration");
@@ -96,13 +100,13 @@ define(["require", "exports", "dojo/_base/declare", "mxui/widget/_WidgetBase", "
                 this.handles = [objectHandle];
             }
         };
-        TimeSeriesWrapper.prototype.fetchDataFromXpath = function (serieEntity, entityConstraint, callback) {
+        TimeSeriesWrapper.prototype.fetchDataFromXpath = function (serieConfig, callback) {
             var _this = this;
             logger.debug(this.id + ".fetchDataFromXpath");
             if (this.contextObject) {
                 var guid = this.contextObject ? this.contextObject.getGuid() : "";
-                var constraint = entityConstraint.replace("[%CurrentObject%]", guid);
-                var xpathString = "//" + serieEntity + constraint;
+                var constraint = serieConfig.entityConstraint.replace("[%CurrentObject%]", guid);
+                var xpathString = "//" + serieConfig.serieEntity + constraint;
                 mx.data.get({
                     callback: callback.bind(this),
                     error: function (error) {
@@ -130,6 +134,28 @@ define(["require", "exports", "dojo/_base/declare", "mxui/widget/_WidgetBase", "
             serie.key = serieConfig.serieKey;
             this.data.push(serie);
         };
+        TimeSeriesWrapper.prototype.fetchDataFromMicroflow = function (serieConfig, callback) {
+            var _this = this;
+            logger.debug(this.id + ".fetchDataFromMicroflow");
+            if (serieConfig.dataSourceMicroflow) {
+                var params = {
+                    actionname: serieConfig.dataSourceMicroflow,
+                    applyto: "selection",
+                    guids: [this.contextObject.getGuid()],
+                };
+                mx.data.action({
+                    params: params,
+                    callback: callback.bind(this),
+                    error: function (error) {
+                        logger.error(_this.id + ": An error occurred while executing microflow: " + error);
+                    },
+                });
+            }
+            else {
+                logger.debug(this.id + ".getDataFromMicroflow, empty context");
+                callback([]);
+            }
+        };
         return TimeSeriesWrapper;
     }(_WidgetBase));
     exports.TimeSeriesWrapper = TimeSeriesWrapper;
@@ -137,7 +163,7 @@ define(["require", "exports", "dojo/_base/declare", "mxui/widget/_WidgetBase", "
         var result = {};
         result.constructor = function () {
             logger.debug(this.id + ".constructor dojo");
-            this.dataLoaded = true;
+            this.dataLoaded = false;
         };
         for (var i in Source.prototype) {
             if (i !== "constructor" && Source.prototype.hasOwnProperty(i)) {

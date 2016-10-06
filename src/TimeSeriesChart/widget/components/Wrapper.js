@@ -27,6 +27,8 @@ define(["require", "exports", "TimeSeriesChart/lib/react", "TimeSeriesChart/lib/
                 chart = React.createElement(NVD3Chart, {
                     type: "lineChart",
                     datum: datum,
+                    x: function (data_, iterator) { return iterator; },
+                    y: function (data_, iterator) { return data_[1]; }
                 });
             }
             return (React.createElement("div", null, chart));
@@ -50,7 +52,6 @@ define(["require", "exports", "TimeSeriesChart/lib/react", "TimeSeriesChart/lib/
         };
         Wrapper.defaultProps = {
             widgetId: "",
-            dataLoaded: false
         };
         return Wrapper;
     }(React.Component));
