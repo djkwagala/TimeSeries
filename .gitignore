@@ -13,6 +13,7 @@ test/javasource/myfirstmodule/*
 !test/javasource/myfirstmodule/actions
 
 .vscode/
+.idea/
 
 out/
 nbproject/

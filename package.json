@@ -1,7 +1,7 @@
 {
-  "name": "TimeSeriesChart",
+  "name": "TimeSeries",
   "version": "1.0.0",
-  "description": "Send progress feedback to user interface when processing takes long.",
+  "description": "Plot and track your data across different time periods on an nv.d3 powered chart",
   "author": "Derrick Kwagala <derrick.kwagala@flockofbirds.org",
   "copyright": "Flock of Birds",
   "main": "Gruntfile.js",
@@ -13,11 +13,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/djkwagala/TimeSeriesWidgetMx.git"
+    "url": "https://github.com/djkwagala/TimeSeries.git"
   },
-  "license": "MIT",
+  "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/djkwagala/TimeSeriesWidgetMx/issues"
+    "url": "https://github.com/djkwagala/TimeSeries/issues"
   },
   "devDependencies": {
     "@types/react": "^0.14.38",
