@@ -1,8 +1,9 @@
 
 import * as React from "TimeSeriesChart/lib/react";
-import ReactDOM = require("TimeSeriesChart/lib/react-dom");
+import * as ReactDOM from "TimeSeriesChart/lib/react-dom";
 import * as d3 from "TimeSeriesChart/lib/d3";
-import * as NVD3Chart from "TimeSeriesChart/lib/react-nvd3";
+
+import NVD3Chart from "../../lib/react-nvd3";
 import ModelProps from "../../TimeSeriesChart.d";
 
 export interface Data {
@@ -70,8 +71,7 @@ export class Wrapper extends React.Component<WidgetProps, {}> {
                             return dataPoint;
                         }},
                 },
-                 duration: 300,
-                useInteractiveGuideline: props.useInteractiveGuidelines
+                duration: 300
             });
         }
         return (

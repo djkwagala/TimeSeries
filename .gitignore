@@ -15,6 +15,7 @@ test/javasource/myfirstmodule/*
 .vscode/
 .idea/
 
+dist/
 out/
 nbproject/
 node_modules/
@@ -24,4 +25,4 @@ node_modules/
 
 src/TimeSeriesChart/widget/TimeSeriesChart.js
 src/TimeSeriesChart/widget/components/Wrapper.js
-
+src/TimeSeriesChart/lib/utils.js
