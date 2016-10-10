@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "TimeSeriesChart/lib/react", "TimeSeriesChart/lib/react-nvd3"], function (require, exports, React, NVD3Chart) {
+define(["require", "exports", "TimeSeriesChart/lib/react", "TimeSeriesChart/lib/d3", "TimeSeriesChart/lib/react-nvd3"], function (require, exports, React, d3, NVD3Chart) {
     "use strict";
     var Wrapper = (function (_super) {
         __extends(Wrapper, _super);
@@ -21,33 +21,54 @@ define(["require", "exports", "TimeSeriesChart/lib/react", "TimeSeriesChart/lib/
         Wrapper.prototype.render = function () {
             logger.debug(this.props.widgetId + ".render");
             var chart = React.createElement("div", null, "Loading ...");
+            var props = this.props;
             var datum = this.getDatum();
+            var xFormat = props.xAxisFormat ? props.xAxisFormat : "%d-%b-%y";
+            var yFormat = props.yAxisFormat ? props.yAxisFormat : "";
             if (this.props.dataLoaded) {
                 logger.debug(this.props.widgetId + ".render dataLoaded");
                 chart = React.createElement(NVD3Chart, {
                     type: "lineChart",
                     datum: datum,
-                    x: function (data_, iterator) { return iterator; },
-                    y: function (data_, iterator) { return data_[1]; }
+                    x: "xPoint",
+                    y: "yPoint",
+                    xAxis: {
+                        axisLabel: this.props.xAxisLabel,
+                        tickFormat: function (dataPoint) {
+                            return d3.time.format(xFormat)(new Date(dataPoint));
+                        },
+                    },
+                    yAxis: {
+                        axisLabel: this.props.yAxisLabel,
+                        tickFormat: function (dataPoint) {
+                            if (yFormat) {
+                                return d3.format(yFormat)(dataPoint);
+                            }
+                            else {
+                                return dataPoint;
+                            }
+                        },
+                    },
+                    duration: 300,
+                    useInteractiveGuideline: props.useInteractiveGuidelines
                 });
             }
             return (React.createElement("div", null, chart));
         };
         Wrapper.prototype.getDatum = function () {
-            logger.debug(this.props.seriesData);
-            var seriesConfig = this.props.seriesData;
+            logger.debug(this.props.widgetId + ".getDatum");
+            var seriesConfig = this.props.seriesConfig;
             var returnDatum = [];
             for (var count = 0; count < seriesConfig.length; count++) {
                 var serieConfig = seriesConfig[count];
-                var serieData = serieConfig.data.map(function (seriePoint) {
-                    return [seriePoint.xPoint, seriePoint.yPoint];
-                });
                 var serie = {
-                    key: serieConfig.key,
-                    values: serieData
+                    key: serieConfig.serieKey,
+                    values: serieConfig.serieData
                 };
                 returnDatum.push(serie);
             }
+            logger.debug(this.props.widgetId + ".getDatum Data: ");
+            logger.debug(returnDatum);
             return returnDatum;
         };
         Wrapper.defaultProps = {

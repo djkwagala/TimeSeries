@@ -44,15 +44,34 @@ export class Wrapper extends React.Component<WidgetProps, {}> {
     public render() {
         logger.debug(this.props.widgetId + ".render");
         let chart = <div>Loading ...</div>;
+        const props = this.props;
         const datum = this.getDatum();
+        const xFormat = props.xAxisFormat ? props.xAxisFormat : "%d-%b-%y";
+        const yFormat = props.yAxisFormat ? props.yAxisFormat : "";
+
         if (this.props.dataLoaded) {
             logger.debug(this.props.widgetId + ".render dataLoaded");
             chart = React.createElement(NVD3Chart, {
                 type: "lineChart",
                 datum: datum,
-                // TODO check what it is doing!
-                x: function (data_: any, iterator: any) { return iterator; },
-                y: function (data_: any, iterator: any) { return data_[1]; }
+                x: "xPoint",
+                y: "yPoint",
+                xAxis: {
+                    axisLabel: this.props.xAxisLabel,
+                    tickFormat: function(dataPoint: any) {
+                        return d3.time.format(xFormat)(new Date(dataPoint)); },
+                },
+                yAxis: {
+                    axisLabel: this.props.yAxisLabel,
+                    tickFormat: function(dataPoint: any) {
+                        if (yFormat) {
+                            return d3.format(yFormat)(dataPoint);
+                        } else {
+                            return dataPoint;
+                        }},
+                },
+                 duration: 300,
+                useInteractiveGuideline: props.useInteractiveGuidelines
             });
         }
         return (
@@ -63,21 +82,19 @@ export class Wrapper extends React.Component<WidgetProps, {}> {
     }
     // TODO get your data from seriesConfig, seriesData, model configuration (Need to be combined)
     private getDatum() {
-        logger.debug(this.props.seriesData);
-        const seriesConfig = this.props.seriesData;
+        logger.debug(this.props.widgetId + ".getDatum");
+        const seriesConfig = this.props.seriesConfig;
         let returnDatum: any[] = [];
         for (let count = 0; count < seriesConfig.length; count++) { // replace with seriesConfig.map((serieConfig)=>{})
             let serieConfig = seriesConfig[count];
-            let serieData = serieConfig.data.map( (seriePoint) => {
-                return [seriePoint.xPoint, seriePoint.yPoint];
-            }
-            );
             let serie = {
-                key: serieConfig.key,
-                values: serieData
+                key: serieConfig.serieKey,
+                values: serieConfig.serieData
             };
            returnDatum.push(serie);
         }
+        logger.debug(this.props.widgetId + ".getDatum Data: ");
+        logger.debug(returnDatum);
         return returnDatum;
     }
 }

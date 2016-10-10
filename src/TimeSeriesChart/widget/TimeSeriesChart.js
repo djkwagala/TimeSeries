@@ -22,13 +22,22 @@ define(["require", "exports", "dojo/_base/declare", "mxui/widget/_WidgetBase", "
         TimeSeriesWrapper.prototype.createProps = function () {
             return {
                 widgetId: this.id + "_Wrapper",
-                seriesData: this.data,
-                dataLoaded: this.dataLoaded
+                seriesData: this.serieData,
+                dataLoaded: this.dataLoaded,
+                showXAxis: this.showXAxis,
+                showYAxis: this.showYAxis,
+                useInteractiveGuidelines: this.useInteractiveGuidelines,
+                showLegend: this.showLegend,
+                xAxisLabel: this.xAxisLabel,
+                xAxisFormat: this.xAxisFormat,
+                staggerLabels: this.staggerLabels,
+                yAxisLabel: this.yAxisLabel,
+                yAxisFormat: this.yAxisFormat,
+                seriesConfig: this.seriesConfig
             };
         };
         TimeSeriesWrapper.prototype.postCreate = function () {
             logger.debug(this.id + ".postCreate");
-            this.data = [];
             this.updateRendering();
         };
         TimeSeriesWrapper.prototype.update = function (object, callback) {
@@ -123,16 +132,13 @@ define(["require", "exports", "dojo/_base/declare", "mxui/widget/_WidgetBase", "
         TimeSeriesWrapper.prototype.setDataFromObjects = function (objects, serieConfig) {
             logger.debug(this.id + ".getCarouselItemsFromObject");
             logger.debug(objects);
-            var serie = {};
-            serie.data = objects.map(function (itemObject) {
+            serieConfig.serieData = objects.map(function (itemObject) {
                 logger.debug(itemObject);
                 return {
                     xPoint: itemObject.get(serieConfig.serieXAttribute),
-                    yPoint: parseFloat(itemObject.get(serieConfig.serieYAttribute)),
+                    yPoint: parseFloat(itemObject.get(serieConfig.serieYAttribute))
                 };
             });
-            serie.key = serieConfig.serieKey;
-            this.data.push(serie);
         };
         TimeSeriesWrapper.prototype.fetchDataFromMicroflow = function (serieConfig, callback) {
             var _this = this;
