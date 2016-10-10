@@ -28,7 +28,7 @@ import { SerieConfig } from "../TimeSeriesChart.d";
 
 // TODO rename class
 export class TimeSeriesWrapper extends _WidgetBase {
-    // Parameters configured in the Modeler    
+    // Parameters configured in the Modeler 
     private svgNode: string;
     private showXAxis: boolean;
     private showYAxis: boolean;
@@ -97,7 +97,7 @@ export class TimeSeriesWrapper extends _WidgetBase {
         ReactDOM.unmountComponentAtNode(this.domNode);
         this.unsubscribeHandles();
     }
-    // Creates a progress object which is used for communication progress betwean server and web UI        
+    // Creates a progress object which is used for communication progress between server and web UI        
     public mxCreateProgressObject(callback: Function) {
         logger.debug(this.id + ".createProgressObject");
     }
@@ -192,6 +192,7 @@ export class TimeSeriesWrapper extends _WidgetBase {
                 xPoint: itemObject.get(serieConfig.serieXAttribute) as number,
                 yPoint: parseFloat(itemObject.get (serieConfig.serieYAttribute)) // convert Big to float or number
                 };
+
         });
     }
 
