@@ -24,7 +24,7 @@ import * as React from "TimeSeriesChart/lib/react";
 import ReactDOM  = require ("TimeSeriesChart/lib/react-dom");
 
 import { WidgetProps, Serie, Data, Wrapper } from "./components/Wrapper";
-import { SerieConfig } from "../TimeSeriesChart.d";
+import { SerieConfig, WidthUnits, HeightUnits } from "../TimeSeriesChart.d";
 
 // TODO rename class
 export class TimeSeriesWrapper extends _WidgetBase {
@@ -40,9 +40,13 @@ export class TimeSeriesWrapper extends _WidgetBase {
     private yAxisLabel: string;
     private yAxisFormat: string;
     private seriesConfig: SerieConfig[];
+    private width: number;
+    private height: number;
+    private widthUnits: WidthUnits;
+    private heightUnits: HeightUnits;
     // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
 
-    private handles: number[];
+    private handles: number;
     private testData: Object[];
     private contextObject: mendix.lib.MxObject;
     private serieData: Data[];
@@ -69,7 +73,11 @@ export class TimeSeriesWrapper extends _WidgetBase {
             staggerLabels: this.staggerLabels,
             yAxisLabel: this.yAxisLabel,
             yAxisFormat: this.yAxisFormat,
-            seriesConfig: this.seriesConfig
+            seriesConfig: this.seriesConfig,
+            width: this.width,
+            widthUnits: this.widthUnits,
+            height: this.height,
+            heightUnits: this.heightUnits
         };
     }
 
@@ -136,10 +144,8 @@ export class TimeSeriesWrapper extends _WidgetBase {
     // Remove subscriptions
     private unsubscribeHandles () {
         if (this.handles) {
-            for (let handle of this.handles) {
-                mx.data.unsubscribe(handle);
-            }
-            this.handles = [];
+            mx.data.unsubscribe(this.handles);
+            this.handles = 0;
         }
     }
     // Reset subscriptions.
@@ -156,13 +162,13 @@ export class TimeSeriesWrapper extends _WidgetBase {
                 },
                 guid: this.contextObject.getGuid(),
             });
-            this.handles = [objectHandle]; // TODO Change to no array.
+            this.handles = objectHandle; // TODO Change to no array.
         }
     }
 
     // Fetch data
     private fetchDataFromXpath(serieConfig: SerieConfig, callback: Function) {
-        logger.debug(this.id  + ".fetchDataFromXpath");
+        logger.debug(this.id  + ".fetchDataFromXpath ");
         if (this.contextObject)  {
             const guid = this.contextObject ? this.contextObject.getGuid() : "";
             const constraint = serieConfig.entityConstraint.replace("[%CurrentObject%]", guid);

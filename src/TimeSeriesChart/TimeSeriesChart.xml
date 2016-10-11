@@ -64,7 +64,7 @@
             <category>Series Config</category>
             <description>Add a series and configure its properties</description>
             <properties>
-                <property key="serieEntity" type="entity">
+                <property key="serieEntity" type="entity" pathType="reference" isPath="optional">
                     <caption>Data Entity</caption>
                     <category>Data source</category>
                     <description>The entity which should be displayed in the carousel</description>
@@ -112,6 +112,39 @@
                     <description>Used in the Legend to interact with the chart</description>                
                 </property>
             </properties>
+        </property>
+        <property key="width" type="integer" defaultValue="920">
+            <caption>Chart width</caption>
+            <category>Appearance</category>
+            <description>Width of the chart</description>
+        </property>
+        <property key="widthUnits" type="enumeration" defaultValue="pixels">
+            <caption>Width Units</caption>
+            <category>Appearance</category>
+            <description></description>
+            <enumerationValues>
+                <enumerationValue key="auto">Auto</enumerationValue>
+                <enumerationValue key="pixels">Pixels</enumerationValue>
+                <enumerationValue key="percent">Percent</enumerationValue>
+                <enumerationValue key="viewPort">Percentage Viewport</enumerationValue>
+            </enumerationValues> 
+        </property>
+
+        <property key="height" type="integer" defaultValue="500">
+            <caption>Chart height</caption>
+            <category>Appearance</category>
+            <description> Height of the chart</description>
+        </property>
+        <property key="heightUnits" type="enumeration" defaultValue="pixels">
+            <caption>Height Units</caption>
+            <category>Appearance</category>
+            <description></description>
+            <enumerationValues>
+                <enumerationValue key="auto">Auto</enumerationValue>
+                <enumerationValue key="pixels">Pixels</enumerationValue>
+                <enumerationValue key="percent">Percent</enumerationValue>
+                <enumerationValue key="viewPort">Percentage Viewport</enumerationValue>
+            </enumerationValues> 
         </property>
     </properties>
 </widget>

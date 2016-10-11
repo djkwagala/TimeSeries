@@ -83,7 +83,8 @@ module.exports = function (grunt) {
             },
             compile: {
                 files: {
-                    "src/<%=pkgName%>/<%=name%>.d.ts" : ["src/" + pkg.name + "/" + pkg.name + ".xml"]
+                   // "src/<%=pkgName%>/<%=name%>.d.ts" : ["src/" + pkg.name + "/" + pkg.name + ".xml"]
+                    "src/<%=pkgName%>/<%=name%>.d.ts" : ["src/" + pkg.name + "/" + pkg.name + "Auto.xml"]
                 }
             }
         } 

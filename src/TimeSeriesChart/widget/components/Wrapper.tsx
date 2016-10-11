@@ -2,9 +2,10 @@
 import * as React from "TimeSeriesChart/lib/react";
 import * as ReactDOM from "TimeSeriesChart/lib/react-dom";
 import * as d3 from "TimeSeriesChart/lib/d3";
-
 import NVD3Chart from "../../lib/react-nvd3";
-import ModelProps from "../../TimeSeriesChart.d";
+
+// import * as NVD3Chart from "TimeSeriesChart/lib/react-nvd3";
+import {ModelProps, HeightUnits, WidthUnits} from "../../TimeSeriesChart.d";
 
 export interface Data {
     xPoint: number;
@@ -37,10 +38,6 @@ export class Wrapper extends React.Component<WidgetProps, {}> {
     }
     private checkConfig() {
         // TODO add validation on config if needed.
-        // if (this.props.imageSource === "microflow" && !this.props.dataSourceMicroflow) {
-        //     mx.ui.error("Error in Configuration of Widget " + this.props.widgetId +
-        //                 " Image Source is set to MicroFlow and No Microflow specified in Tab 'Source - Microflow' ");
-        // }
     }
     public render() {
         logger.debug(this.props.widgetId + ".render");
@@ -49,18 +46,30 @@ export class Wrapper extends React.Component<WidgetProps, {}> {
         const datum = this.getDatum();
         const xFormat = props.xAxisFormat ? props.xAxisFormat : "%d-%b-%y";
         const yFormat = props.yAxisFormat ? props.yAxisFormat : "";
+        // TODO: correct return types for values: not currently used
+        const height_ = this.getValueFromUnits(props.height, props.heightUnits);
+        const width_ = this.getValueFromUnits(props.width, props.widthUnits);
 
-        if (this.props.dataLoaded) {
-            logger.debug(this.props.widgetId + ".render dataLoaded");
+        const xEncoding = d3.time.scale().range([0, this.props.width]);
+        const yEncoding = d3.scale.linear().range([this.props.height, 0]);
+
+
+        if (props.dataLoaded) {
+            logger.debug(props.widgetId + ".render dataLoaded");
             chart = React.createElement(NVD3Chart, {
                 type: "lineChart",
                 datum: datum,
                 x: "xPoint",
                 y: "yPoint",
+                height: this.props.height,
+                width: this.props.width,
                 xAxis: {
                     axisLabel: this.props.xAxisLabel,
                     tickFormat: function(dataPoint: any) {
                         return d3.time.format(xFormat)(new Date(dataPoint)); },
+                    // scale: xEncoding,
+                    scale: d3.time.scale(),
+                    // showMaxMin: true,
                 },
                 yAxis: {
                     axisLabel: this.props.yAxisLabel,
@@ -70,15 +79,23 @@ export class Wrapper extends React.Component<WidgetProps, {}> {
                         } else {
                             return dataPoint;
                         }},
+                        scale: yEncoding,
                 },
-                duration: 300
+                xDomain: d3.extent(datum[0].values, function(d: any) {
+                     return d.xPoint;
+                    }),
+                yDomain: [0, d3.max(datum[0].values, function(d: any){
+                    return d.yPoint;
+                })],
+                showLegend: props.showLegend,
+                showYAxis: props.showYAxis,
+                showXAxis: props.showXAxis,
+                xScale: d3.time.scale(),
+                duration: 300,
+                useInteractiveGuideline: props.useInteractiveGuidelines,
             });
         }
-        return (
-            <div>
-                {chart}
-            </div>
-        );
+        return (<div>{chart}</div>) ;
     }
     // TODO get your data from seriesConfig, seriesData, model configuration (Need to be combined)
     private getDatum() {
@@ -94,7 +111,19 @@ export class Wrapper extends React.Component<WidgetProps, {}> {
            returnDatum.push(serie);
         }
         logger.debug(this.props.widgetId + ".getDatum Data: ");
-        logger.debug(returnDatum);
+        logger.debug(returnDatum );
         return returnDatum;
+    }
+     /**
+     * Processes the heights and width values depending on type of units
+     */
+    private getValueFromUnits(value: number, type: WidthUnits | HeightUnits): number|string {
+        if (type === "auto" ) {
+            return "";
+        }
+        if (type === "percent") {
+            return value + "%";
+        }
+        return value;
     }
 }
