@@ -1,5 +1,5 @@
 {
-  "name": "TimeSeries",
+  "name": "TimeSeriesChart",
   "version": "1.0.0",
   "description": "Plot and track your data across different time periods on an nv.d3 powered chart",
   "author": "Derrick Kwagala <derrick.kwagala@flockofbirds.org",
@@ -28,9 +28,10 @@
     "grunt-contrib-compress": "~0.11.0",
     "grunt-contrib-copy": "~0.8.0",
     "grunt-contrib-watch": "~0.6.1",
+    "grunt-xsltproc": "^0.6.1",
     "load-grunt-tasks": "^3.1.0",
-    "typescript": "^2.0.3",
-    "grunt-xsltproc": "^0.6.1"
+    "tslint-eslint-rules": "^2.1.0",
+    "typescript": "^2.0.3"
   },
   "dependencies": {
     "@types/big.js": "0.0.31",

@@ -25,7 +25,7 @@ node_modules/
 *.bak
 *.map
 *.tmp
-
+./public
 
 src/TimeSeriesChart/widget/TimeSeriesChart.js
 src/TimeSeriesChart/widget/components/Wrapper.js

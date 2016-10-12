@@ -1,19 +1,20 @@
 
 import * as React from "TimeSeriesChart/lib/react";
-import * as ReactDOM from "TimeSeriesChart/lib/react-dom";
-import * as d3 from "TimeSeriesChart/lib/d3";
+
 import NVD3Chart from "../../lib/react-nvd3";
+import * as d3 from "TimeSeriesChart/lib/d3";
 
 // import * as NVD3Chart from "TimeSeriesChart/lib/react-nvd3";
-import {ModelProps, HeightUnits, WidthUnits} from "../../TimeSeriesChart.d";
+import { ModelProps } from "../../TimeSeriesChart.d";
 
 export interface Data {
     xPoint: number;
     yPoint: number;
 }
 export interface Serie {
-    data?: Data[];
+    values?: Data[];
     key?: any;
+    color?: string;
 }
 export interface WidgetProps extends ModelProps {
     widgetId: string;
@@ -21,7 +22,6 @@ export interface WidgetProps extends ModelProps {
     dataLoaded?: boolean;
 }
 export class Wrapper extends React.Component<WidgetProps, {}> {
-    private logMsg: string;
     public static defaultProps: WidgetProps = {
         widgetId: "",
     };
@@ -47,83 +47,84 @@ export class Wrapper extends React.Component<WidgetProps, {}> {
         const xFormat = props.xAxisFormat ? props.xAxisFormat : "%d-%b-%y";
         const yFormat = props.yAxisFormat ? props.yAxisFormat : "";
         // TODO: correct return types for values: not currently used
-        const height_ = this.getValueFromUnits(props.height, props.heightUnits);
-        const width_ = this.getValueFromUnits(props.width, props.widthUnits);
+        // const height_ = this.getValueFromUnits(props.height, props.heightUnits);
+        // const width_ = this.getValueFromUnits(props.width, props.widthUnits);
 
-        const xEncoding = d3.time.scale().range([0, this.props.width]);
-        const yEncoding = d3.scale.linear().range([this.props.height, 0]);
-
+        const xEncoding = d3.time.scale().range([ 0, this.props.width ]);
+        const yEncoding = d3.scale.linear().range([ this.props.height, 0 ]);
 
         if (props.dataLoaded) {
             logger.debug(props.widgetId + ".render dataLoaded");
             chart = React.createElement(NVD3Chart, {
-                type: "lineChart",
-                datum: datum,
-                x: "xPoint",
-                y: "yPoint",
+                datum,
+                duration: 300,
                 height: this.props.height,
+                showLegend: props.showLegend,
+                showXAxis: props.showXAxis,
+                showYAxis: props.showYAxis,
+                type: "lineChart",
+                useInteractiveGuideline: props.useInteractiveGuidelines,
                 width: this.props.width,
+                x: "xPoint",
                 xAxis: {
                     axisLabel: this.props.xAxisLabel,
-                    tickFormat: function(dataPoint: any) {
-                        return d3.time.format(xFormat)(new Date(dataPoint)); },
-                    // scale: xEncoding,
-                    scale: d3.time.scale(),
-                    // showMaxMin: true,
+                    scale: xEncoding,
+                    showMaxMin: true,
+                    tickFormat: (dataPoint: any) => {
+                        return d3.time.format(xFormat)(new Date(dataPoint));
+                    },
                 },
+                xDomain: d3.extent(datum[0].values, (d: any) => {
+                     return d.xPoint;
+                    }),
+                xScale: d3.time.scale(),
+                y: "yPoint",
                 yAxis: {
                     axisLabel: this.props.yAxisLabel,
-                    tickFormat: function(dataPoint: any) {
+                    scale: yEncoding,
+                    tickFormat: (dataPoint: any) => {
                         if (yFormat) {
                             return d3.format(yFormat)(dataPoint);
                         } else {
                             return dataPoint;
-                        }},
-                        scale: yEncoding,
+                        }
+                    },
                 },
-                xDomain: d3.extent(datum[0].values, function(d: any) {
-                     return d.xPoint;
-                    }),
-                yDomain: [0, d3.max(datum[0].values, function(d: any){
+                yDomain: [ 0, d3.max(datum[0].values, (d: any) => {
                     return d.yPoint;
-                })],
-                showLegend: props.showLegend,
-                showYAxis: props.showYAxis,
-                showXAxis: props.showXAxis,
-                xScale: d3.time.scale(),
-                duration: 300,
-                useInteractiveGuideline: props.useInteractiveGuidelines,
+                }) ],
             });
         }
-        return (<div>{chart}</div>) ;
+        return (<div>{chart}</div>);
     }
     // TODO get your data from seriesConfig, seriesData, model configuration (Need to be combined)
     private getDatum() {
         logger.debug(this.props.widgetId + ".getDatum");
         const seriesConfig = this.props.seriesConfig;
-        let returnDatum: any[] = [];
+        let returnDatum: Serie[] = [];
         for (let count = 0; count < seriesConfig.length; count++) { // replace with seriesConfig.map((serieConfig)=>{})
             let serieConfig = seriesConfig[count];
-            let serie = {
+            let serie: Serie = {
                 key: serieConfig.serieKey,
-                values: serieConfig.serieData
+                values: serieConfig.serieData,
             };
-           returnDatum.push(serie);
+            if (serieConfig.serieColor) {
+                serie.color = serieConfig.serieColor;
+            }
+            returnDatum.push(serie);
         }
         logger.debug(this.props.widgetId + ".getDatum Data: ");
-        logger.debug(returnDatum );
+        logger.debug(returnDatum);
         return returnDatum;
     }
-     /**
+
+    /**
      * Processes the heights and width values depending on type of units
      */
-    private getValueFromUnits(value: number, type: WidthUnits | HeightUnits): number|string {
-        if (type === "auto" ) {
+     /*private getValueFromUnits(value: number, type: WidthUnits | HeightUnits): number | string {
+        if (type === "auto") {
             return "";
         }
-        if (type === "percent") {
-            return value + "%";
-        }
         return value;
-    }
+    }*/
 }

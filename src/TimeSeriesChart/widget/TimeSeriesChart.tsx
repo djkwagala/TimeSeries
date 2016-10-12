@@ -1,5 +1,3 @@
-
-
 /*
  ProgressBarButton
  ========================
@@ -15,21 +13,18 @@
  ========================
  TimeSeriesChart LineBar. 
  */
-
+import { HeightUnits, SerieConfig, WidthUnits } from "../TimeSeriesChart.d";
+import { Data, WidgetProps, Wrapper } from "./components/Wrapper";
 import * as dojoDeclare from "dojo/_base/declare";
-import * as _WidgetBase from  "mxui/widget/_WidgetBase";
 import * as mxLang from "mendix/lang";
-
+import * as _WidgetBase from "mxui/widget/_WidgetBase";
+//tslint:disable-next-line
 import * as React from "TimeSeriesChart/lib/react";
-import ReactDOM  = require ("TimeSeriesChart/lib/react-dom");
-
-import { WidgetProps, Serie, Data, Wrapper } from "./components/Wrapper";
-import { SerieConfig, WidthUnits, HeightUnits } from "../TimeSeriesChart.d";
+import ReactDOM = require ("TimeSeriesChart/lib/react-dom");
 
 // TODO rename class
 export class TimeSeriesWrapper extends _WidgetBase {
-    // Parameters configured in the Modeler 
-    private svgNode: string;
+    // Parameters configured in the Modeler    
     private showXAxis: boolean;
     private showYAxis: boolean;
     private useInteractiveGuidelines: boolean;
@@ -47,13 +42,12 @@ export class TimeSeriesWrapper extends _WidgetBase {
     // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
 
     private handles: number;
-    private testData: Object[];
     private contextObject: mendix.lib.MxObject;
-    private serieData: Data[];
+    // private serieData: Data[];
     private dataLoaded: boolean;
 
-
-    // The TypeScript Construct, not the dojo constructor, move constructor work into widget prototype at bottom of the page. 
+    // The TypeScript Construct, not the dojo constructor, 
+    // move constructor work into widget prototype at bottom of the page. 
     constructor(args?: Object, elem?: HTMLElement) {
         // Do not add any default value here... it wil not run in dojo!     
         super() ;
@@ -61,23 +55,22 @@ export class TimeSeriesWrapper extends _WidgetBase {
     }
     public createProps(): WidgetProps {
         return {
-            widgetId: this.id + "_Wrapper",
-            seriesData: this.serieData,
             dataLoaded: this.dataLoaded,
+            height: this.height,
+            heightUnits: this.heightUnits,
+            seriesConfig: this.seriesConfig,
+            showLegend: this.showLegend,
             showXAxis: this.showXAxis,
             showYAxis: this.showYAxis,
-            useInteractiveGuidelines: this.useInteractiveGuidelines,
-            showLegend: this.showLegend,
-            xAxisLabel: this.xAxisLabel,
-            xAxisFormat: this.xAxisFormat,
             staggerLabels: this.staggerLabels,
-            yAxisLabel: this.yAxisLabel,
-            yAxisFormat: this.yAxisFormat,
-            seriesConfig: this.seriesConfig,
+            useInteractiveGuidelines: this.useInteractiveGuidelines,
+            widgetId: this.id + "_Wrapper",
             width: this.width,
             widthUnits: this.widthUnits,
-            height: this.height,
-            heightUnits: this.heightUnits
+            xAxisFormat: this.xAxisFormat,
+            xAxisLabel: this.xAxisLabel,
+            yAxisFormat: this.yAxisFormat,
+            yAxisLabel: this.yAxisLabel,
         };
     }
 
@@ -85,9 +78,11 @@ export class TimeSeriesWrapper extends _WidgetBase {
     public postCreate() {
         logger.debug(this.id + ".postCreate");
         this.updateRendering();
+        this.smartDefaults();
     }
 
-    // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
+    // mxui.widget._WidgetBase.update is called when context is changed or initialized. 
+    // Implement to re-render and / or fetch data.
     // TODO Check with Mendix dev, if update callback should wait for data to be retrieved or not.
     public update(object: mendix.lib.MxObject, callback?: Function) {
         logger.debug(this.id + ".update");
@@ -98,10 +93,12 @@ export class TimeSeriesWrapper extends _WidgetBase {
         });
         this.resetSubscriptions();
     }
-    // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. Implement to do special tear-down work.
+    // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. 
+    // Implement to do special tear-down work.
     public uninitialize() {
         logger.debug(this.id + ".uninitialize");
-        // Clean up listeners, helper objects, etc. There is no need to remove listeners added with this.connect / this.subscribe / this.own.
+        // Clean up listeners, helper objects, etc. There is no need to remove listeners added with 
+        // this.connect / this.subscribe / this.own.
         ReactDOM.unmountComponentAtNode(this.domNode);
         this.unsubscribeHandles();
     }
@@ -132,13 +129,11 @@ export class TimeSeriesWrapper extends _WidgetBase {
         }
     }
 
-
     // Set store value, could trigger a re-render the interface.
     private updateRendering (callback?: Function) {
         logger.debug(this.id + ".updateRendering");
-            logger.debug(this.id + ".beforeReactDOM");
-            ReactDOM.render(<Wrapper {...this.createProps() } />, this.domNode);
-        // The callback, coming from update, needs to be executed, to let the page know it finished rendering
+        ReactDOM.render(<Wrapper {...this.createProps() } />, this.domNode);
+    // The callback, coming from update, needs to be executed, to let the page know it finished rendering
         mxLang.nullExec(callback);
     }
     // Remove subscriptions
@@ -168,8 +163,8 @@ export class TimeSeriesWrapper extends _WidgetBase {
 
     // Fetch data
     private fetchDataFromXpath(serieConfig: SerieConfig, callback: Function) {
-        logger.debug(this.id  + ".fetchDataFromXpath ");
-        if (this.contextObject)  {
+        logger.debug(this.id + ".fetchDataFromXpath ");
+        if (this.contextObject) {
             const guid = this.contextObject ? this.contextObject.getGuid() : "";
             const constraint = serieConfig.entityConstraint.replace("[%CurrentObject%]", guid);
             const xpathString = "//" + serieConfig.serieEntity + constraint;
@@ -181,7 +176,7 @@ export class TimeSeriesWrapper extends _WidgetBase {
                 xpath : xpathString,
             });
         } else {
-            logger.debug(this.id  + ".fetchDataFromXpath empty context");
+            logger.debug(this.id + ".fetchDataFromXpath empty context");
             callback([]);
         }
     }
@@ -196,14 +191,14 @@ export class TimeSeriesWrapper extends _WidgetBase {
             logger.debug(itemObject);
             return {
                 xPoint: itemObject.get(serieConfig.serieXAttribute) as number,
-                yPoint: parseFloat(itemObject.get (serieConfig.serieYAttribute)) // convert Big to float or number
+                yPoint: parseFloat(itemObject.get (serieConfig.serieYAttribute)), // convert Big to float or number
                 };
 
         });
     }
 
     private fetchDataFromMicroflow(serieConfig: SerieConfig, callback: Function) {
-        logger.debug(this.id  + ".fetchDataFromMicroflow");
+        logger.debug(this.id + ".fetchDataFromMicroflow");
         if (serieConfig.dataSourceMicroflow) {
             const params: {
                     actionname: string,
@@ -212,31 +207,39 @@ export class TimeSeriesWrapper extends _WidgetBase {
                 } = {
                     actionname: serieConfig.dataSourceMicroflow,
                     applyto: "selection",
-                    guids: [this.contextObject.getGuid()],
+                    guids: [ this.contextObject.getGuid() ],
                 };
 
             mx.data.action({
                 params,
                 callback: callback.bind(this),
                 error: (error) => {
-                    logger.error(this.id  + ": An error occurred while executing microflow: " + error);
+                    logger.error(this.id + ": An error occurred while executing microflow: " + error);
                 },
             });
         } else {
             // case there is not context ID the xpath will fail, so it should always show no images.
-            logger.debug(this.id  + ".getDataFromMicroflow, empty context");
+            logger.debug(this.id + ".getDataFromMicroflow, empty context");
             callback([]);
         }
     }
 
-
+    private smartDefaults() {
+        this.showXAxis = true;
+        this.showYAxis = true;
+        this.useInteractiveGuidelines = true;
+        this.showLegend = true;
+        this.staggerLabels = true;
+    }
 }
 // Declare widget's prototype the Dojo way
 // Thanks to https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/dojo/README.md
-let dojoTimeSeries = dojoDeclare("TimeSeriesChart.widget.TimeSeriesChart", [_WidgetBase], (function(Source: any) {
+// tslint:disable : only-arrow-functions
+let dojoTimeSeries = dojoDeclare("TimeSeriesChart.widget.TimeSeriesChart", [ _WidgetBase ], (function (Source: any) {
     let result: any = {};
-    // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
-    result.constructor = function() {
+    // dojo.declare.constructor is called to construct the widget instance. 
+    // Implement to initialize non-primitive properties.
+    result.constructor = function () {
         logger.debug( this.id + ".constructor dojo");
         this.dataLoaded = false;
     };

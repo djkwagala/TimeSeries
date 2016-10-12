@@ -5,30 +5,7 @@
 
     <icon />
 
-    <properties>
-        <property key="showXAxis" type="boolean" defaultValue="true">
-            <caption>Display x-axis</caption>
-            <category>Chart Config</category>
-            <description>To enable display of x-axis</description>
-        </property>
-        <property key="showYAxis" type="boolean" defaultValue="true">
-            <caption>Display y-axis</caption>
-            <category>Chart Config</category>
-            <description>Enable display of the y-axis</description>
-        </property>
-
-        <property key="useInteractiveGuidelines" type="boolean" defaultValue="true">
-            <caption>Use interactive guidelines</caption>
-            <category>Chart Config</category>
-            <description>For showing nice  looking tooltips and a guideline</description>
-        </property>
-
-        <property key="showLegend" type="boolean" defaultValue="true">
-            <caption>Display legend</caption>
-            <category>Chart Config</category>
-            <description>Enable display of the legend</description>
-        </property>
-
+    <properties>        
         <property key="xAxisLabel" type="string">
             <caption>X-axis label</caption>
             <category>X-axis Config</category>
@@ -111,6 +88,12 @@
                     <category>Data source</category>
                     <description>Used in the Legend to interact with the chart</description>                
                 </property>
+                <property key="serieColor" type="string" required="false">
+                    <caption>Serie color</caption>
+                    <category>Appearance</category>
+                    <description>color of the serie line in the chart</description>                
+                </property>
+
             </properties>
         </property>
         <property key="width" type="integer" defaultValue="920">
@@ -125,8 +108,6 @@
             <enumerationValues>
                 <enumerationValue key="auto">Auto</enumerationValue>
                 <enumerationValue key="pixels">Pixels</enumerationValue>
-                <enumerationValue key="percent">Percent</enumerationValue>
-                <enumerationValue key="viewPort">Percentage Viewport</enumerationValue>
             </enumerationValues> 
         </property>
 
@@ -142,8 +123,6 @@
             <enumerationValues>
                 <enumerationValue key="auto">Auto</enumerationValue>
                 <enumerationValue key="pixels">Pixels</enumerationValue>
-                <enumerationValue key="percent">Percent</enumerationValue>
-                <enumerationValue key="viewPort">Percentage Viewport</enumerationValue>
             </enumerationValues> 
         </property>
     </properties>

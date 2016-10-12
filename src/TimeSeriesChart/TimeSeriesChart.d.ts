@@ -11,13 +11,14 @@ interface Data {
 
 export interface SerieConfig {    
     serieEntity?: string;
-    serieSource?: "xpath" | "microflow";
+    serieSource?: SerieSource;
     entityConstraint?: string;
     dataSourceMicroflow?: string;
     serieXAttribute?: string;
     serieYAttribute?: string;
     serieKey?: string;
     serieData?: Data[];
+    serieColor?: string;
 }
 
 export interface ModelProps {
@@ -37,5 +38,12 @@ export interface ModelProps {
     heightUnits?: HeightUnits;
 } 
 
+declare let NVD3Chart: React.ComponentClass<any>;
+declare module "TimeSeriesChart/lib/react-nvd3" {
+    export = NVD3Chart;
+}
+
+
 export type WidthUnits = "auto" | "pixels" | "percent";
 export type HeightUnits = "auto" | "pixels" | "percent";
+export type SerieSource = "xpath" | "microflow";
