@@ -13,6 +13,7 @@ test/javasource/*
 !test/javasource/*/
 test/javasource/*/*
 !test/javasource/*/actions
+!test/*.mpr
 
 .vscode/
 .idea/
