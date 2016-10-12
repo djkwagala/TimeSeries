@@ -44,8 +44,16 @@ interface NVD3ChartProps {
     // nv properties
     yAxis?: any;
     xAxis?: any;
+    height?: number;
+    width?: number;
+    showLegend?: boolean;
+    showXAxis: boolean;
+    showYAxis: boolean;
     duration?: number;
-    useInteractiveGuidelines?: boolean;
+    useInteractiveGuideline?: boolean;
+    xDomain: [any, any];
+    xScale: d3.time.Scale<number, number>;
+    yDomain: any[];
 }
 
 interface AnyObject extends Object {
