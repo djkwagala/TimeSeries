@@ -3,13 +3,11 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "TimeSeriesChart/lib/react", "TimeSeriesChart/lib/d3", "./utils", "TimeSeriesChart/lib/nv.d3"], function (require, exports, React, d3, utils_1) {
+define(["require", "exports", "TimeSeriesChart/lib/d3", "TimeSeriesChart/lib/react", "./Polyfills", "./utils", "TimeSeriesChart/lib/nv.d3"], function (require, exports, d3, React, Polyfills_1, utils_1) {
     "use strict";
     var SETTINGS = ["x", "y", "type", "datum", "configure"];
     var SIZE = ["width", "height"];
     var MARGIN = "margin";
-    var LEGEND = "legend";
-    var TOOLTIP = "tooltip";
     var CONTAINER_STYLE = "containerStyle";
     var RENDER_START = "renderStart";
     var ELEMENT_CLICK = "elementClick";
@@ -66,18 +64,19 @@ define(["require", "exports", "TimeSeriesChart/lib/react", "TimeSeriesChart/lib/
                 });
             }
             dispatcher = this.chart.lines.dispatch;
-            if (dispatcher["renderEnd"]) {
+            if (dispatcher[RENDER_END]) {
                 dispatcher.on("renderEnd", this.renderEnd.bind(this));
             }
-            if (dispatcher["elementClick"]) {
+            if (dispatcher[ELEMENT_CLICK]) {
                 dispatcher.on("elementClick", this.elementClick.bind(this));
             }
             this.rendering = true;
             return this.chart;
         };
         NVD3Chart.prototype.renderEnd = function (event) {
-            if (utils_1.isCallable(this.props.renderEnd))
+            if (utils_1.isCallable(this.props.renderEnd)) {
                 this.props.renderEnd(this.chart, RENDER_END);
+            }
             this.rendering = false;
         };
         NVD3Chart.prototype.elementClick = function (event) {
@@ -87,13 +86,15 @@ define(["require", "exports", "TimeSeriesChart/lib/react", "TimeSeriesChart/lib/
         };
         NVD3Chart.prototype.configureComponents = function (chart, options) {
             for (var optionName in options) {
-                var optionValue = options[optionName];
-                if (chart) {
-                    if (utils_1.isPlainObject(optionValue)) {
-                        this.configureComponents(chart[optionName], optionValue);
-                    }
-                    else if (typeof chart[optionName] === "function") {
-                        chart[optionName](optionValue);
+                if (options.hasOwnProperty(optionName)) {
+                    var optionValue = options[optionName];
+                    if (chart) {
+                        if (utils_1.isPlainObject(optionValue)) {
+                            this.configureComponents(chart[optionName], optionValue);
+                        }
+                        else if (typeof chart[optionName] === "function") {
+                            chart[optionName](optionValue);
+                        }
                     }
                 }
             }
@@ -105,7 +106,9 @@ define(["require", "exports", "TimeSeriesChart/lib/react", "TimeSeriesChart/lib/
         };
         NVD3Chart.prototype.render = function () {
             var _this = this;
-            return (React.createElement("div", {className: "nv-chart"}, 
+            var size = utils_1.pick(this.props, SIZE);
+            var style = Polyfills_1.ObjectAssign({}, size, this.props.containerStyle);
+            return (React.createElement("div", {className: "nv-chart", style: style}, 
                 React.createElement("svg", {ref: function (n) { return _this.svg = n; }})
             ));
         };
