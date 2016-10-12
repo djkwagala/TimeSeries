@@ -15,6 +15,7 @@ export interface Serie {
     values?: Data[];
     key?: any;
     color?: string;
+    area?: boolean;
 }
 export interface WidgetProps extends ModelProps {
     widgetId: string;
@@ -110,6 +111,9 @@ export class Wrapper extends React.Component<WidgetProps, {}> {
             };
             if (serieConfig.serieColor) {
                 serie.color = serieConfig.serieColor;
+            }
+            if (serieConfig.area) {
+                serie.area = serieConfig.area;
             }
             returnDatum.push(serie);
         }

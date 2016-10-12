@@ -1,18 +1,4 @@
-/*
- ProgressBarButton
- ========================
- 
- @file      : TimeSeriesChart.js
- @version   : 1.0.0
- @author    : Derrick Kwagala
- @date      : Fri, 23 Sept 2016
- @copyright : Flock of Birds
- @license   : Apache License V2.0
- 
- Documentation
- ========================
- TimeSeriesChart LineBar. 
- */
+
 import { HeightUnits, SerieConfig, WidthUnits } from "../TimeSeriesChart.d";
 import { Data, WidgetProps, Wrapper } from "./components/Wrapper";
 import * as dojoDeclare from "dojo/_base/declare";
@@ -39,15 +25,12 @@ export class TimeSeriesWrapper extends _WidgetBase {
     private height: number;
     private widthUnits: WidthUnits;
     private heightUnits: HeightUnits;
-    // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
 
+    // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
     private handles: number;
     private contextObject: mendix.lib.MxObject;
-    // private serieData: Data[];
     private dataLoaded: boolean;
 
-    // The TypeScript Construct, not the dojo constructor, 
-    // move constructor work into widget prototype at bottom of the page. 
     constructor(args?: Object, elem?: HTMLElement) {
         // Do not add any default value here... it wil not run in dojo!     
         super() ;
@@ -74,16 +57,14 @@ export class TimeSeriesWrapper extends _WidgetBase {
         };
     }
 
-    // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
     public postCreate() {
         logger.debug(this.id + ".postCreate");
         this.updateRendering();
         this.smartDefaults();
     }
-
-    // mxui.widget._WidgetBase.update is called when context is changed or initialized. 
-    // Implement to re-render and / or fetch data.
-    // TODO Check with Mendix dev, if update callback should wait for data to be retrieved or not.
+    /**
+     * called when context is changed or initialized
+     */
     public update(object: mendix.lib.MxObject, callback?: Function) {
         logger.debug(this.id + ".update");
         this.contextObject = object;
@@ -93,23 +74,20 @@ export class TimeSeriesWrapper extends _WidgetBase {
         });
         this.resetSubscriptions();
     }
-    // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. 
-    // Implement to do special tear-down work.
+    /**
+     * called when the widget is destroyed
+     * will need to unmount react components
+     */
     public uninitialize() {
         logger.debug(this.id + ".uninitialize");
-        // Clean up listeners, helper objects, etc. There is no need to remove listeners added with 
-        // this.connect / this.subscribe / this.own.
         ReactDOM.unmountComponentAtNode(this.domNode);
         this.unsubscribeHandles();
     }
-    // Creates a progress object which is used for communication progress between server and web UI        
-    public mxCreateProgressObject(callback: Function) {
-        logger.debug(this.id + ".createProgressObject");
-    }
-
+    /**
+     * retrieves series data depending on its data source.
+     */
     private updateData(callback: Function) {
-        logger.debug(this.id + ".getCarouselData");
-        // update data for each serie, retrieving data depending on its data source.
+        logger.debug(this.id + ".updateData");
         const serie = this.seriesConfig[0];
         // TODO do this in a async parallel way for all series, in the future.
         if (serie.serieSource === "xpath" && serie.serieEntity) {
@@ -157,7 +135,7 @@ export class TimeSeriesWrapper extends _WidgetBase {
                 },
                 guid: this.contextObject.getGuid(),
             });
-            this.handles = objectHandle; // TODO Change to no array.
+            this.handles = objectHandle;
         }
     }
 

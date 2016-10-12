@@ -13,7 +13,7 @@
         <property key="xAxisFormat" type="string" required="false">
             <caption>X-axis data format</caption>
             <category>X-axis config</category>
-            <description>Format of data on x-axis</description>
+            <description>Formats of date on x-axis (use NVD3 date formatting)</description>
         </property>
 
         <property key="staggerLabels" type="boolean" defaultValue="true">
@@ -89,7 +89,12 @@
                 <property key="serieColor" type="string" required="false">
                     <caption>Serie color</caption>
                     <category>Appearance</category>
-                    <description>color of the serie line in the chart</description>                
+                    <description>Color of the serie line in the chart</description>                
+                </property>
+                <property key="serieFill" type="boolean" defaultValue="false">
+                    <caption>Fill serie area</caption>
+                    <category>Appearance</category>
+                    <description>Should serie area be filled</description>                
                 </property>
 
             </properties>
@@ -100,7 +105,7 @@
             <description>Width of the chart</description>
         </property>
         <property key="widthUnits" type="enumeration" defaultValue="pixels">
-            <caption>Width Units</caption>
+            <caption>Width units</caption>
             <category>Appearance</category>
             <description></description>
             <enumerationValues>
@@ -115,7 +120,7 @@
             <description>Height of the chart</description>
         </property>
         <property key="heightUnits" type="enumeration" defaultValue="pixels">
-            <caption>Height Units</caption>
+            <caption>Height units</caption>
             <category>Appearance</category>
             <description></description>
             <enumerationValues>
