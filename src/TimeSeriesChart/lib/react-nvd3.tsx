@@ -1,21 +1,23 @@
-import * as React from "TimeSeriesChart/lib/react";
 import * as d3 from "TimeSeriesChart/lib/d3";
+import * as React from "TimeSeriesChart/lib/react";
+
+import { ObjectAssign } from "./Polyfills";
+
 import "TimeSeriesChart/lib/nv.d3";
+
 import {
-    pick,
-    without,
-    isPlainObject,
     bindFunctions,
     getValueFunction,
+    isCallable,
+    isPlainObject,
+    pick,
     propsByPrefix,
-    isCallable
+    without,
 } from "./utils";
 
-let SETTINGS = ["x", "y", "type", "datum", "configure"];
-let SIZE = ["width", "height"];
+let SETTINGS = [ "x", "y", "type", "datum", "configure" ];
+let SIZE = [ "width", "height" ];
 let MARGIN = "margin";
-let LEGEND = "legend";
-let TOOLTIP = "tooltip";
 let CONTAINER_STYLE = "containerStyle";
 
 const RENDER_START = "renderStart";
@@ -25,22 +27,22 @@ const READY = "ready";
 
 // TODO Set interface types.
 interface NVD3ChartProps {
-    type: "lineChart"; // | "scatterChart" | "stackedAreaChart" | "discreteBarChart" | "multiBarChart" | "multiBarHorizontalChart" | "linePlusBarChart" | "cumulativeLineChart" | "lineWithFocusChart" | "pieChart" | "bulletChart" | "indentedTree";
+    type: "lineChart";
     configure?: (chart: nv.LineChart) => void;
     containerStyle?: any;
     context?: any;
     datum: any[] | Function;
     chartOptions?: any;
-     margin?: any;
-     x?: string | Function;
-     y?: string | Function;
+    margin?: any;
+    x?: string | Function;
+    y?: string | Function;
     // events
     ready?: Function;
     renderStart?: Function;
     renderEnd?: Function;
     elementClick?: Function;
     // nv properties
-     yAxis?: any;
+    yAxis?: any;
     xAxis?: any;
     duration?: number;
     useInteractiveGuidelines?: boolean;
@@ -49,7 +51,6 @@ interface NVD3ChartProps {
 interface AnyObject extends Object {
     [key: string]: any;
 }
-
 
 interface ChartBase extends nv.LineChart {
     [key: string]: any;
@@ -68,7 +69,7 @@ export class NVD3Chart extends React.Component<NVD3ChartProps, {}> {
      * Instantiate a new chart setting
      * a callback if exists
      */
-    componentDidMount() {
+    public componentDidMount() {
         nv.addGraph(this.renderChart.bind(this), (chart) => {
             if (isCallable(this.props.ready)) {
                 this.props.ready(chart, READY);
@@ -79,14 +80,14 @@ export class NVD3Chart extends React.Component<NVD3ChartProps, {}> {
     /**
      * Update the chart after state is changed.
      */
-    componentDidUpdate() {
+    public componentDidUpdate() {
         this.renderChart();
     }
 
     /**
      * Remove listeners
      */
-    componentWillUnmount() {
+    public componentWillUnmount() {
         if (this.resizeHandler) {
             this.resizeHandler.clear();
         }
@@ -95,7 +96,7 @@ export class NVD3Chart extends React.Component<NVD3ChartProps, {}> {
     /**
      * Creates a chart model and render it
      */
-    renderChart() {
+    private renderChart() {
         let dispatcher: d3.Dispatch;
 
         // We try to reuse the current chart instance. If not possible then lets instantiate again
@@ -116,7 +117,7 @@ export class NVD3Chart extends React.Component<NVD3ChartProps, {}> {
             this.chart.y(getValueFunction(this.parsedProps.y, "y"));
         }
         if (this.props.margin) {
-            this.chart.margin(this.options([MARGIN], pick).margin || propsByPrefix("margin", this.props) || {});
+            this.chart.margin(this.options([ MARGIN ], pick).margin || propsByPrefix("margin", this.props) || {});
         }
 
         // Configure componentes recursively
@@ -143,25 +144,25 @@ export class NVD3Chart extends React.Component<NVD3ChartProps, {}> {
         // PieCharts and lineCharts are an special case. Their dispacher is the pie component inside the chart.
         // There are some charts do not feature the renderEnd event
         // switch (this.props.type) {
-            // case "multiBarChart":
-            //     dispatcher = this.chart.multibar.dispatch;
-            //     break;
-            // case "pieChart":
-            //     dispatcher = this.chart.pie.dispatch;
-            //     break;
-            // case "lineChart":
-            //     dispatcher = this.chart.lines.dispatch;
-            //     break;
-            // default:
-            //     dispatcher = this.chart.dispatch;
+        // case "multiBarChart":
+        //     dispatcher = this.chart.multibar.dispatch;
+        //     break;
+        // case "pieChart":
+        //     dispatcher = this.chart.pie.dispatch;
+        //     break;
+        // case "lineChart":
+        //     dispatcher = this.chart.lines.dispatch;
+        //     break;
+        // default:
+        //     dispatcher = this.chart.dispatch;
         // }
 
         dispatcher = this.chart.lines.dispatch;
 
-        if (dispatcher["renderEnd"]) {
+        if (dispatcher[RENDER_END]) {
             dispatcher.on("renderEnd", this.renderEnd.bind(this));
         }
-        if (dispatcher["elementClick"]) {
+        if (dispatcher[ELEMENT_CLICK]) {
             dispatcher.on("elementClick", this.elementClick.bind(this));
         }
         this.rendering = true;
@@ -173,9 +174,10 @@ export class NVD3Chart extends React.Component<NVD3ChartProps, {}> {
      * Render end callback function
      * @param  {Event} e
      */
-    renderEnd(event: Event) {
-        if (isCallable(this.props.renderEnd))
+    public renderEnd(event: Event) {
+        if (isCallable(this.props.renderEnd)) {
             this.props.renderEnd(this.chart, RENDER_END);
+        }
         // Once renders end then we set rendering to false to allow to reuse the chart instance.
         this.rendering = false;
     }
@@ -184,7 +186,7 @@ export class NVD3Chart extends React.Component<NVD3ChartProps, {}> {
      * element click callback function
      * @param  {Event} e
      */
-    elementClick(event: Event) {
+    private elementClick(event: Event) {
         if (isCallable(this.props.elementClick)) {
             this.props.elementClick(event, "elementClick");
         }
@@ -195,14 +197,16 @@ export class NVD3Chart extends React.Component<NVD3ChartProps, {}> {
      * @param {nvd3 chart} chart  A nvd3 chart instance
      * @param {object} options    A key value object
      */
-    configureComponents(chart: ChartBase, options: AnyObject) {
+    private configureComponents(chart: ChartBase, options: AnyObject) {
         for (let optionName in options) {
-            let optionValue = options[optionName];
-            if (chart) {
-                if (isPlainObject(optionValue)) {
-                    this.configureComponents(chart[optionName], optionValue);
-                } else if (typeof chart[optionName] === "function") {
-                    chart[optionName](optionValue);
+            if (options.hasOwnProperty(optionName)) {
+                let optionValue = options[optionName];
+                if (chart) {
+                    if (isPlainObject(optionValue)) {
+                        this.configureComponents(chart[optionName], optionValue);
+                    } else if (typeof chart[optionName] === "function") {
+                        chart[optionName](optionValue);
+                    }
                 }
             }
         }
@@ -213,7 +217,7 @@ export class NVD3Chart extends React.Component<NVD3ChartProps, {}> {
      * @param {Array} keys          An array of keys to preserve or remove
      * @param {Function} predicate  The function used to filter keys
      */
-    options(keys: string[], predicate: Function) {
+    public options(keys: string[], predicate: Function) {
         // DEPRECATED: this.props.chartOptions
         let opt = this.parsedProps.options || this.parsedProps || this.props.chartOptions;
         predicate = predicate || pick;
@@ -224,11 +228,11 @@ export class NVD3Chart extends React.Component<NVD3ChartProps, {}> {
      * Render function
      * svg element needs to have height and width.
      */
-    render() {
-        // let size = pick(this.props, SIZE);
-        // let style = Object.assign({}, size, this.props.containerStyle);
+    public render() {
+        let size = pick(this.props, SIZE);
+        let style = ObjectAssign({}, size, this.props.containerStyle);
         return (
-            <div className="nv-chart">
+            <div className="nv-chart" style={style}>
                 <svg ref={n => this.svg = n}></svg>
             </div>
         );

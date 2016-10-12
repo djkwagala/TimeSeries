@@ -42,7 +42,7 @@ export function filterObject(object: AnyObject, keys: string[], predicate: Funct
         if (predicate(keys, key)) {
             result[key] = value;
         }
-    };
+    }
     return result;
 }
 
@@ -86,7 +86,7 @@ export function isPlainObject(obj: any): boolean {
 }
 
 /**
- * It replace all the {type:"function", name: "nameOffunction"}
+ * It replace all the {type:"function", name: "name Of function"}
  * ocurrences in a give object by the functions stored
  * in the {context} with the name {name}
  * @param  {Object} o         The original object to be patched
@@ -99,15 +99,17 @@ export function bindFunctions(originalObject: AnyObject, context: AnyObject): An
     let key: string;
     out = Array.isArray(originalObject) ? [] : {};
     for (key in originalObject) {
-        v = originalObject[key];
-        if (v == null) {
-            continue;
-        } else if (typeof v === "object" && v !== null && v.type !== "function") {
-            out[key] = bindFunctions(v, context);
-        } else if (v.type === "function") {
-            out[key] = context[v.name];
-        } else {
-            out[key] = v;
+        if (originalObject.hasOwnProperty(key)) {
+            v = originalObject[key];
+            if (v == null) {
+                continue;
+            } else if (typeof v === "object" && v !== null && v.type !== "function") {
+                out[key] = bindFunctions(v, context);
+            } else if (v.type === "function") {
+                out[key] = context[v.name];
+            } else {
+                out[key] = v;
+            }
         }
     }
     return out;
@@ -137,7 +139,9 @@ export function propsByPrefix(prefix: string, props: AnyObject) {
     console.warn("Set margin with prefixes is deprecated use an object instead");
     prefix = prefix + "-";
     return Object.keys(props).reduce((memo, prop) => {
-        if (prop.substr(0, prefix.length) === prefix) memo[prop.replace(prefix, "")] = props[prop];
+        if (prop.substr(0, prefix.length) === prefix) {
+            memo[prop.replace(prefix, "")] = props[prop];
+        }
         return memo;
     }, {} as AnyObject);
 }
