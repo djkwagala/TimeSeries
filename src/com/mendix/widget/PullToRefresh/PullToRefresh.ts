@@ -25,6 +25,7 @@ class PullToRefreshWrapper extends WidgetBase {
 
         this.pullToRefresh = new PullToRefresh({
             mainElement: document.body,
+            onRefresh: () => { mx.ui.reload(); },
             pullToRefreshElement: this.pullToRefreshElement
         });
 
@@ -33,6 +34,7 @@ class PullToRefreshWrapper extends WidgetBase {
 
     uninitialize() {
         this.pullToRefresh.removeEvents();
+        domConstruct.destroy(this.pullToRefreshElement.id);
 
         return true;
     }
